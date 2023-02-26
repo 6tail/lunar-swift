@@ -33,14 +33,20 @@ public class Holiday: NSObject {
 
     init(day: String, name: String, work: Bool, target: String) {
         if !day.contains("-") {
-            _day = day.prefix(4) + "-" + day[day.index(day.startIndex, offsetBy: 4)..<day.index(day.startIndex, offsetBy: 6)] + "-" + day.suffix(2)
+            let y = day.prefix(4)
+            let m = day[day.index(day.startIndex, offsetBy: 4)..<day.index(day.startIndex, offsetBy: 6)]
+            let d = day.suffix(2)
+            _day = "\(y)-\(m)-\(d)"
         } else {
             _day = day
         }
         _name = name
         _work = work
         if !target.contains("-") {
-            _target = target.prefix(4) + "-" + target[target.index(target.startIndex, offsetBy: 4)..<target.index(target.startIndex, offsetBy: 6)] + "-" + target.suffix(2)
+            let y = target.prefix(4)
+            let m = target[target.index(target.startIndex, offsetBy: 4)..<target.index(target.startIndex, offsetBy: 6)]
+            let d = target.suffix(2)
+            _target = "\(y)-\(m)-\(d)"
         } else {
             _target = target
         }
