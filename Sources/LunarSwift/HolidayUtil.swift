@@ -100,7 +100,7 @@ public class HolidayUtil {
         return l
     }
 
-    class func getHoliday(year: Int, month: Int, day: Int) -> Holiday? {
+    public class func getHoliday(year: Int, month: Int, day: Int) -> Holiday? {
         let l = findHolidaysForward(key: String(format: "%04d%02d%02d", year, month, day))
         return l.isEmpty ? nil : l[0]
     }

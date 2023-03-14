@@ -44,7 +44,7 @@ public class XiaoYun: NSObject {
         }
     }
 
-    init(daYun: DaYun, index: Int, forward: Bool) {
+    public init(daYun: DaYun, index: Int, forward: Bool) {
         _daYun = daYun
         _lunar = _daYun.lunar
         _index = index

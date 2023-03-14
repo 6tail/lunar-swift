@@ -31,7 +31,7 @@ public class LunarMonth: NSObject {
         }
     }
 
-    init(lunarYear: Int, lunarMonth: Int, dayCount: Int, firstJulianDay: Double) {
+    public init(lunarYear: Int, lunarMonth: Int, dayCount: Int, firstJulianDay: Double) {
         _year = lunarYear
         _month = lunarMonth
         _dayCount = dayCount

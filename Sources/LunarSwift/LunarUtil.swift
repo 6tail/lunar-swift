@@ -900,7 +900,7 @@ public class LunarUtil {
         "亥": ["壬", "甲"]
     ]
 
-    class func getTimeZhiIndex(hm: String) -> Int {
+    public class func getTimeZhiIndex(hm: String) -> Int {
         var s = hm
         if s.count > 5 {
             s = String(s.prefix(5))
@@ -916,7 +916,7 @@ public class LunarUtil {
         return 0
     }
 
-    class func convertTime(hm: String) -> String {
+    public class func convertTime(hm: String) -> String {
         ZHI[getTimeZhiIndex(hm: hm) + 1]
     }
 

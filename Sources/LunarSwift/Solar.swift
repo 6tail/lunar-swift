@@ -47,11 +47,17 @@ public class Solar: NSObject {
         }
     }
 
-    init(year: Int, month: Int, day: Int, hour: Int = 0, minute: Int = 0, second: Int = 0) {
+    public init(year: Int, month: Int, day: Int, hour: Int = 0, minute: Int = 0, second: Int = 0) {
         if 1582 == year && 10 == month {
             if day > 4 && day < 15 {
                 fatalError("wrong solar year \(year) month \(month) day \(day)")
             }
+        }
+        if month < 1 || month > 12 {
+            fatalError("wrong month \(month)")
+        }
+        if day < 1 || day > 31 {
+            fatalError("wrong day \(day)")
         }
         if hour < 0 || hour > 23 {
             fatalError("wrong hour \(hour)")
@@ -70,12 +76,12 @@ public class Solar: NSObject {
         _second = second
     }
 
-    convenience init(date: Date) {
+    public convenience init(date: Date) {
         let calendar = Calendar.current
         self.init(year: calendar.component(.year, from: date), month: calendar.component(.month, from: date), day: calendar.component(.day, from: date), hour: calendar.component(.hour, from: date), minute: calendar.component(.minute, from: date), second: calendar.component(.second, from: date))
     }
 
-    convenience override init() {
+    public convenience override init() {
         self.init(date: Date())
     }
 
@@ -147,34 +153,44 @@ public class Solar: NSObject {
             offsetYear += 60
         }
         var startYear = today.year - offsetYear - 1
-        while true {
+        let minYear = baseYear - 2
+        while startYear >= minYear {
             years.append(startYear)
             startYear -= 60
-            if startYear < baseYear {
-                break
-            }
         }
-        var hour = 0
+        var hours = [Int]()
         let timeZhi = timeGanZhi.suffix(1)
-        for i in (0..<LunarUtil.ZHI.count)
+        for i in (1..<LunarUtil.ZHI.count)
         {
             if LunarUtil.ZHI[i] == timeZhi
             {
-                hour = (i - 1) * 2
+                hours.append((i - 1) * 2)
             }
         }
-        for y in years
+        if "子" == timeZhi
         {
-            outer: for x in (0..<3) {
-                let year = y + x
-                var solar = Solar.fromYmdHms(year: year, month: 1, day: 1, hour: hour)
-                while solar.year == year {
+            hours.append(23)
+        }
+        for hour in hours
+        {
+            for y in years
+            {
+                let maxYear = y + 3
+                var year = y
+                var month = 11
+                if year < baseYear
+                {
+                    year = baseYear
+                    month = 1
+                }
+                var solar = Solar.fromYmdHms(year: year, month: month, day: 1, hour: hour)
+                while solar.year <= maxYear {
                     let lunar = solar.lunar
                     let dgz = (2 == sec) ? lunar.dayInGanZhiExact2 : lunar.dayInGanZhiExact
                     if lunar.yearInGanZhiExact == yearGanZhi && lunar.monthInGanZhiExact == monthGanZhi && dgz == dayGanZhi && lunar.timeInGanZhi == timeGanZhi
                     {
                         l.append(solar)
-                        break outer
+                        break
                     }
                     solar = solar.next(days: 1)
                 }

@@ -31,7 +31,7 @@ public class Holiday: NSObject {
         }
     }
 
-    init(day: String, name: String, work: Bool, target: String) {
+    public init(day: String, name: String, work: Bool, target: String) {
         if !day.contains("-") {
             let y = day.prefix(4)
             let m = day[day.index(day.startIndex, offsetBy: 4)..<day.index(day.startIndex, offsetBy: 6)]

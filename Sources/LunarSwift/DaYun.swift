@@ -52,7 +52,7 @@ public class DaYun: NSObject {
         }
     }
 
-    init(yun: Yun, index: Int) {
+    public init(yun: Yun, index: Int) {
         _yun = yun
         _lunar = yun.lunar
         _index = index

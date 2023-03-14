@@ -52,7 +52,7 @@ public class Yun: NSObject {
         }
     }
 
-    init(eightChar: EightChar, gender: Int, sect: Int = 1) {
+    public init(eightChar: EightChar, gender: Int, sect: Int = 1) {
         _lunar = eightChar.lunar
         _gender = gender
         // 阳

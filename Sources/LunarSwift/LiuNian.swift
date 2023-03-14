@@ -37,7 +37,7 @@ public class LiuNian: NSObject {
         }
     }
 
-    init(daYun: DaYun, index: Int) {
+    public init(daYun: DaYun, index: Int) {
         _daYun = daYun
         _lunar = _daYun.lunar
         _index = index

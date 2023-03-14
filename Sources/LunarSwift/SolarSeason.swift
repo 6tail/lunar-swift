@@ -19,18 +19,18 @@ public class SolarSeason: NSObject {
         }
     }
 
-    init(year: Int, month: Int) {
+    public init(year: Int, month: Int) {
         _year = year
         _month = month
     }
 
-    init(date: Date) {
+    public init(date: Date) {
         let calendar = Calendar.current
         _year = calendar.component(.year, from: date)
         _month = calendar.component(.month, from: date)
     }
 
-    convenience override init() {
+    public convenience override init() {
         self.init(date: Date())
     }
 

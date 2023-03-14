@@ -12,15 +12,15 @@ public class SolarYear: NSObject {
         }
     }
 
-    init(year: Int) {
+    public init(year: Int) {
         _year = year
     }
 
-    init(date: Date) {
+    public init(date: Date) {
         _year = Calendar.current.component(.year, from: date)
     }
 
-    convenience override init() {
+    public convenience override init() {
         self.init(date: Date())
     }
 

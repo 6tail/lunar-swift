@@ -189,7 +189,7 @@ public class Lunar: NSObject {
         }
     }
 
-    init(lunarYear: Int, lunarMonth: Int, lunarDay: Int, hour: Int = 0, minute: Int = 0, second: Int = 0) {
+    public init(lunarYear: Int, lunarMonth: Int, lunarDay: Int, hour: Int = 0, minute: Int = 0, second: Int = 0) {
         var y = LunarYear(lunarYear: lunarYear)
         let m = y.getMonth(lunarMonth: lunarMonth)
         if nil == m {
@@ -406,8 +406,7 @@ public class Lunar: NSObject {
         var lunarDay = 0
         let ly = LunarYear(lunarYear: solar.year)
         for m in ly.months {
-            let firstDay = Solar.fromJulianDay(julianDay: m.firstJulianDay)
-            let days = solar.subtract(solar: firstDay)
+            let days = solar.subtract(solar: Solar.fromJulianDay(julianDay: m.firstJulianDay))
             if days < m.dayCount {
                 lunarYear = m.year
                 lunarMonth = m.month
@@ -721,6 +720,133 @@ public class Lunar: NSObject {
     public var nextJie: JieQi {
         get {
             getNextJie(wholeDay: false)!
+        }
+    }
+
+    public var shuJiu: ShuJiu? {
+        get {
+            let current = Solar.fromYmdHms(year: solar.year, month: solar.month, day: solar.day)
+            var start = _jieQi["DONG_ZHI"]!
+            start = Solar.fromYmdHms(year: start.year, month: start.month, day: start.day)
+
+            if current.isBefore(solar: start) {
+                start = _jieQi["冬至"]!
+                start = Solar.fromYmdHms(year: start.year, month: start.month, day: start.day)
+            }
+
+            let end = start.next(days: 81)
+
+            if current.isBefore(solar: start) || !current.isBefore(solar: end) {
+                return nil
+            }
+
+            let days = current.subtract(solar: start)
+            return ShuJiu(name: LunarUtil.NUMBER[days / 9 + 1] + "九", index: days % 9 + 1)
+        }
+    }
+
+    public var fu: Fu? {
+        get {
+            let current = Solar.fromYmdHms(year: solar.year, month: solar.month, day: solar.day)
+            let xiaZhi = _jieQi["夏至"]!
+            let liQiu = _jieQi["立秋"]!
+            var start = Solar.fromYmdHms(year: xiaZhi.year, month: xiaZhi.month, day: xiaZhi.day)
+            // 第1个庚日
+            var add = 6 - xiaZhi.lunar.dayGanIndex
+            if add < 0 {
+                add += 10
+            }
+            // 第3个庚日，即初伏第1天
+            add += 20
+            start = start.next(days: add)
+
+            // 初伏以前
+            if current.isBefore(solar: start) {
+                return nil
+            }
+
+            var days = current.subtract(solar: start)
+            if days < 10 {
+                return Fu(name: "初伏", index: days + 1)
+            }
+
+            // 第4个庚日，中伏第1天
+            start = start.next(days: 10)
+            days = current.subtract(solar: start)
+            if days < 10 {
+                return Fu(name: "中伏", index: days + 1)
+            }
+
+            // 第5个庚日，中伏第11天或末伏第1天
+            start = start.next(days: 10)
+            days = current.subtract(solar: start)
+            let liQiuSolar = Solar.fromYmdHms(year: liQiu.year, month: liQiu.month, day: liQiu.day)
+            // 末伏
+            if !liQiuSolar.isAfter(solar: start) {
+                if days < 10 {
+                    return Fu(name: "末伏", index: days + 1)
+                }
+            } else {
+                // 中伏
+                if days < 10 {
+                    return Fu(name: "中伏", index: days + 11)
+                }
+                // 末伏第1天
+                start = start.next(days: 10)
+                days = current.subtract(solar: start)
+                if days < 10 {
+                    return Fu(name: "末伏", index: days + 1)
+                }
+            }
+            return nil
+        }
+    }
+
+    public var liuYao: String {
+        get {
+            LunarUtil.LIU_YAO[(abs(month) - 1 + day - 1) % 6]
+        }
+    }
+
+    public var wuHou: String {
+        get {
+            let jieQi = getPrevJie(wholeDay: true)!
+            var offset = 0
+            for i in (0..<Lunar.JIE_QI.count) {
+                if jieQi.name == Lunar.JIE_QI[i] {
+                    offset = i
+                    break
+                }
+            }
+            var index = solar.subtract(solar: jieQi.solar) / 5
+            if index > 2 {
+                index = 2
+            }
+            return LunarUtil.WU_HOU[(offset * 3 + index) % LunarUtil.WU_HOU.count]
+        }
+    }
+
+    public var hou: String {
+        get {
+            let jieQi = getPrevJie(wholeDay: true)!
+            let max = LunarUtil.HOU.count - 1
+            var offset = solar.subtract(solar: jieQi.solar) / 5
+            if (offset > max) {
+                offset = max
+            }
+            return "\(jieQi.name) \(LunarUtil.HOU[offset])"
+        }
+    }
+
+    public var dayLu: String {
+        get {
+            let gan = LunarUtil.LU[dayGan]!
+            let zhi = LunarUtil.LU[dayZhi]
+            var lu = "\(gan)命互禄"
+            if (nil != zhi) {
+                lu += " \(zhi!)命进禄"
+            }
+            return lu
         }
     }
 

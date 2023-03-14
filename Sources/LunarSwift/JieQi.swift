@@ -31,7 +31,7 @@ public class JieQi: NSObject {
         }
     }
 
-    init(name: String, solar: Solar) {
+    public init(name: String, solar: Solar) {
         _name = name
         _solar = solar
         for i in (0..<Lunar.JIE_QI.count) {

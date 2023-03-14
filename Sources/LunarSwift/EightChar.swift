@@ -14,7 +14,7 @@ public class EightChar: NSObject {
         }
     }
 
-    init(lunar: Lunar) {
+    public init(lunar: Lunar) {
         sect = 2
         _lunar = lunar
     }

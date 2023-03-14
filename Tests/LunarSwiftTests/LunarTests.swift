@@ -100,4 +100,28 @@ final class LunarTests: XCTestCase {
         XCTAssertEqual(Solar.fromYmdHms(year: 4, month: 2, day: 9).lunar.yearShengXiao, "猪")
     }
 
+    func test24() throws {
+        XCTAssertEqual(Lunar.fromYmdHms(lunarYear: 1518, lunarMonth: 1, lunarDay: 1).solar.ymd, "1518-02-10")
+    }
+
+    func test25() throws {
+        XCTAssertEqual(Lunar.fromYmdHms(lunarYear: 793, lunarMonth: 1, lunarDay: 1).solar.ymd, "0793-02-15")
+    }
+
+    func test26() throws {
+        XCTAssertEqual(Lunar.fromYmdHms(lunarYear: 2025, lunarMonth: -6, lunarDay: 1).solar.ymd, "2025-07-25")
+    }
+
+    func test27() throws {
+        XCTAssertEqual(Lunar.fromYmdHms(lunarYear: 2025, lunarMonth: 6, lunarDay: 1).solar.ymd, "2025-06-25")
+    }
+
+    func test28() throws {
+        XCTAssertEqual(Lunar.fromYmdHms(lunarYear: 41, lunarMonth: 1, lunarDay: 1).solar.ymd, "0041-02-20")
+    }
+
+    func test29() throws {
+        XCTAssertEqual(Lunar.fromYmdHms(lunarYear: 1537, lunarMonth: 1, lunarDay: 1).solar.ymd, "1537-02-10")
+    }
+
 }

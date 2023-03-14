@@ -17,7 +17,7 @@ public class LiuYue: NSObject {
         }
     }
 
-    init(liuNian: LiuNian, index: Int) {
+    public init(liuNian: LiuNian, index: Int) {
         _liuNian = liuNian
         _index = index
     }

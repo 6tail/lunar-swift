@@ -48,6 +48,30 @@ public class LunarYear: NSObject {
         }
     }
 
+    public var monthsInYear: [LunarMonth] {
+        get {
+            var l: [LunarMonth] = []
+            for m in _months {
+                if m.year == _year {
+                    l.append(m)
+                }
+            }
+            return l
+        }
+    }
+
+    public var dayCount: Int {
+        get {
+            var n = 0
+            for m in _months {
+                if m.year == _year {
+                    n += m.dayCount
+                }
+            }
+            return n
+        }
+    }
+
     public var jieQiJulianDays: [Double] {
         get {
             _jieQiJulianDays
@@ -72,7 +96,7 @@ public class LunarYear: NSObject {
         }
     }
 
-    init(lunarYear: Int) {
+    public init(lunarYear: Int) {
         _year = lunarYear
         _months = [LunarMonth]()
         let offset = lunarYear - 4
@@ -112,7 +136,10 @@ public class LunarYear: NSObject {
         // 冬至前的初一
         var w = ShouXingUtil.calcShuo(pjd: jq[0])
         if w > jq[0] {
-            w -= 29.5306
+            if currentYear != 41 && currentYear != 193 && currentYear != 288 && currentYear != 345 && currentYear != 918 && currentYear != 1013
+            {
+                w -= 29.5306
+            }
         }
         // 递推每月初一
         for i in (0..<16) {
@@ -123,42 +150,42 @@ public class LunarYear: NSObject {
             dayCounts.append(Int(hs[i+1] - hs[i]))
         }
 
-        var currentYearLeap = LunarYear.LEAP[currentYear]
-        if nil == currentYearLeap {
-            currentYearLeap = -1
-            if hs[13] <= jq[24] {
-                var i = 1
-                while hs[i + 1] > jq[2 * i] && i < 13 {
-                    i += 1
+        let prevYear = currentYear - 1
+        var leapYear = -1
+        var leapIndex = -1
+
+        var leap = LunarYear.LEAP[currentYear]
+        if nil == leap
+        {
+            leap = LunarYear.LEAP[prevYear]
+            if nil == leap
+            {
+                if hs[13] <= jq[24] {
+                    var i = 1
+                    while hs[i + 1] > jq[2 * i] && i < 13 {
+                        i += 1
+                    }
+                    leapYear = currentYear
+                    leapIndex = i
                 }
-                currentYearLeap = i
+            } else {
+                leapYear = prevYear
+                leapIndex = leap! - 12
             }
+        } else {
+            leapYear = currentYear
+            leapIndex = leap!
         }
 
-        let prevYear = currentYear - 1
-        var prevYearLeap = LunarYear.LEAP[prevYear]
-        if nil == prevYearLeap {
-            prevYearLeap = -1
-        } else {
-            prevYearLeap! -= 12
-        }
         var y = prevYear
         var m = 11
         for i in (0..<15) {
             var cm = m
-            var isNextLeap = false
-            if y == currentYear && i == currentYearLeap {
+            if y == leapYear && i == leapIndex {
                 cm = -cm
-            } else if y == prevYear && i == prevYearLeap {
-                cm = -cm
-            }
-            if y == currentYear && i+1 == currentYearLeap {
-                isNextLeap = true
-            } else if y == prevYear && i+1 == prevYearLeap {
-                isNextLeap = true
             }
             _months.append(LunarMonth(lunarYear: y, lunarMonth: cm, dayCount: dayCounts[i], firstJulianDay: hs[i] + Solar.J2000))
-            if !isNextLeap {
+            if y != leapYear || i + 1 != leapIndex {
                 m += 1
             }
             if m == 13 {
@@ -166,6 +193,15 @@ public class LunarYear: NSObject {
                 y += 1
             }
         }
+    }
+
+    public class func fromYear(lunarYear: Int) -> LunarYear {
+        var y = LunarYear.CACHE[lunarYear]
+        if nil == y {
+            y = LunarYear(lunarYear: lunarYear)
+            LunarYear.CACHE[lunarYear] = y
+        }
+        return y!
     }
 
     public func getMonth(lunarMonth: Int) -> LunarMonth? {

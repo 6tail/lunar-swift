@@ -100,18 +100,18 @@ public class SolarUtil {
         "12-26": ["毛泽东诞辰纪念日"]
     ]
 
-    class func isLeapYear(year: Int) -> Bool {
+    public class func isLeapYear(year: Int) -> Bool {
         (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 
-    class func getDaysOfYear(year: Int) -> Int {
+    public class func getDaysOfYear(year: Int) -> Int {
         if 1582 == year {
             return 355
         }
         return isLeapYear(year: year) ? 366 : 365
     }
 
-    class func getDaysOfMonth(year: Int, month: Int) -> Int {
+    public class func getDaysOfMonth(year: Int, month: Int) -> Int {
         if 1582 == year && 10 == month {
             return 21
         }
@@ -123,7 +123,7 @@ public class SolarUtil {
         return d
     }
 
-    class func getDaysInYear(year: Int, month: Int, day: Int) -> Int {
+    public class func getDaysInYear(year: Int, month: Int, day: Int) -> Int {
         var days = 0;
         for i in (1..<month) {
             days += getDaysOfMonth(year: year, month: i)
@@ -140,11 +140,11 @@ public class SolarUtil {
         return days
     }
 
-    class func getWeeksOfMonth(year: Int, month: Int, start: Int) -> Int {
+    public class func getWeeksOfMonth(year: Int, month: Int, start: Int) -> Int {
         Int(ceil(Double(getDaysOfMonth(year: year, month: month) + Solar.fromYmdHms(year: year, month: month, day: 1).week - start) / Double(7)))
     }
 
-    class func getWeek(year: Int, month: Int, day: Int) -> Int {
+    public class func getWeek(year: Int, month: Int, day: Int) -> Int {
         var y = year
         var m = month
         // 蔡勒公式
@@ -164,7 +164,7 @@ public class SolarUtil {
         return (w + 7) % 7
     }
 
-    class func isBefore(ay: Int, am: Int, ad: Int, ah: Int, ai: Int, ac: Int, by: Int, bm: Int, bd: Int, bh: Int, bi: Int, bc: Int) -> Bool {
+    public class func isBefore(ay: Int, am: Int, ad: Int, ah: Int, ai: Int, ac: Int, by: Int, bm: Int, bd: Int, bh: Int, bi: Int, bc: Int) -> Bool {
         if ay > by {
             return false
         }
@@ -198,7 +198,7 @@ public class SolarUtil {
         return ac < bc
     }
 
-    class func isAfter(ay: Int, am: Int, ad: Int, ah: Int, ai: Int, ac: Int, by: Int, bm: Int, bd: Int, bh: Int, bi: Int, bc: Int) -> Bool {
+    public class func isAfter(ay: Int, am: Int, ad: Int, ah: Int, ai: Int, ac: Int, by: Int, bm: Int, bd: Int, bh: Int, bi: Int, bc: Int) -> Bool {
         if ay > by {
             return true
         }
@@ -232,7 +232,7 @@ public class SolarUtil {
         return ac > bc
     }
 
-    class func getDaysBetween(ay: Int, am: Int, ad: Int, by: Int, bm: Int, bd: Int) -> Int {
+    public class func getDaysBetween(ay: Int, am: Int, ad: Int, by: Int, bm: Int, bd: Int) -> Int {
         var n: Int
         var days: Int
         if ay == by {

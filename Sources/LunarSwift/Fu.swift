@@ -1,7 +1,7 @@
 import Foundation
 
 @objcMembers
-public class ShuJiu: NSObject {
+public class Fu: NSObject {
     private var _name: String
     private var _index: Int
 

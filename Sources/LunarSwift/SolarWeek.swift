@@ -31,14 +31,14 @@ public class SolarWeek: NSObject {
         }
     }
 
-    init(year: Int, month: Int, day: Int, start: Int) {
+    public init(year: Int, month: Int, day: Int, start: Int) {
         _year = year
         _month = month
         _day = day
         _start = start
     }
 
-    init(date: Date, start: Int) {
+    public init(date: Date, start: Int) {
         let calendar = Calendar.current
         _year = calendar.component(.year, from: date)
         _month = calendar.component(.month, from: date)
@@ -46,7 +46,7 @@ public class SolarWeek: NSObject {
         _start = start
     }
 
-    convenience init(start: Int) {
+    public convenience init(start: Int) {
         self.init(date: Date(), start: start)
     }
 
