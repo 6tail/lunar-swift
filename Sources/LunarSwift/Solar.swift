@@ -258,8 +258,9 @@ public class Solar: NSObject {
             }
             //计算几月第几个星期几对应的节日
             let weeks = Int(ceil(Double(_day) / 7))
+            let key = "\(_month)-\(weeks)-\(week)"
             //星期几，0代表星期天
-            f = SolarUtil.FESTIVAL["\(_month)-\(weeks)-\(week)"]
+            f = SolarUtil.WEEK_FESTIVAL[key]
             if nil != f {
                 l.append(f!)
             }

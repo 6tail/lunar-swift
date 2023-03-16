@@ -32,6 +32,7 @@ public class Lunar: NSObject {
     private var _weekIndex: Int
     private var _jieQi: [String: Solar]
     private var _solar: Solar
+    private var _eightChar: EightChar?
 
     public var year: Int {
         get {
@@ -497,7 +498,7 @@ public class Lunar: NSObject {
         }
     }
 
-    public var earInGanZhiByLiChun: String {
+    public var yearInGanZhiByLiChun: String {
         get {
             "\(yearGanByLiChun)\(yearZhiByLiChun)"
         }
@@ -506,6 +507,18 @@ public class Lunar: NSObject {
     public var yearShengXiao: String {
         get {
             LunarUtil.SHENG_XIAO[_yearZhiIndex + 1]
+        }
+    }
+
+    public var yearShengXiaoByLiChun: String {
+        get {
+            LunarUtil.SHENG_XIAO[_yearZhiIndexByLiChun + 1]
+        }
+    }
+
+    public var yearShengXiaoExact: String {
+        get {
+            LunarUtil.SHENG_XIAO[_yearZhiIndexExact + 1]
         }
     }
 
@@ -668,6 +681,397 @@ public class Lunar: NSObject {
     public var weekInChinese: String {
         get {
             SolarUtil.WEEK[week]
+        }
+    }
+
+    public var season: String {
+        get {
+            LunarUtil.SEASON[abs(_month)]
+        }
+    }
+
+    public var xiu: String {
+        get {
+            LunarUtil.XIU["\(dayZhi)\(week)"]!
+        }
+    }
+
+    public var xiuLuck: String {
+        get {
+            LunarUtil.XIU_LUCK[xiu]!
+        }
+    }
+
+    public var xiuSong: String {
+        get {
+            LunarUtil.XIU_SONG[xiu]!
+        }
+    }
+
+    public var zheng: String {
+        get {
+            LunarUtil.ZHENG[xiu]!
+        }
+    }
+
+    public var animal: String {
+        get {
+            LunarUtil.ANIMAL[xiu]!
+        }
+    }
+
+    public var gong: String {
+        get {
+            LunarUtil.GONG[xiu]!
+        }
+    }
+
+    public var shou: String {
+        get {
+            LunarUtil.SHOU[gong]!
+        }
+    }
+
+    public var pengZuGan: String {
+        get {
+            LunarUtil.PENGZU_GAN[_dayGanIndex + 1]
+        }
+    }
+
+    public var pengZuZhi: String {
+        get {
+            LunarUtil.PENGZU_ZHI[_dayZhiIndex + 1]
+        }
+    }
+
+    public var dayPositionXi: String {
+        get {
+            LunarUtil.POSITION_XI[_dayGanIndex + 1]
+        }
+    }
+
+    public var dayPositionXiDesc: String {
+        get {
+            LunarUtil.POSITION_DESC[dayPositionXi]!
+        }
+    }
+
+    public var dayPositionYangGui: String {
+        get {
+            LunarUtil.POSITION_YANG_GUI[_dayGanIndex + 1]
+        }
+    }
+
+    public var dayPositionYangGuiDesc: String {
+        get {
+            LunarUtil.POSITION_DESC[dayPositionYangGui]!
+        }
+    }
+
+    public var dayPositionYinGui: String {
+        get {
+            LunarUtil.POSITION_YIN_GUI[_dayGanIndex + 1]
+        }
+    }
+
+    public var dayPositionYinGuiDesc: String {
+        get {
+            LunarUtil.POSITION_DESC[dayPositionYinGui]!
+        }
+    }
+
+    public var dayPositionFu: String {
+        get {
+            getDayPositionFu(sect: 2)
+        }
+    }
+
+    public var dayPositionFuDesc: String {
+        get {
+            getDayPositionFuDesc(sect: 2)
+        }
+    }
+
+    public func getDayPositionFu(sect: Int) -> String {
+        (1 == sect ? LunarUtil.POSITION_FU : LunarUtil.POSITION_FU_2)[_dayGanIndex + 1]
+    }
+
+    public func getDayPositionFuDesc(sect: Int) -> String {
+        LunarUtil.POSITION_DESC[getDayPositionFu(sect: sect)]!
+    }
+
+    public var dayPositionCai: String {
+        get {
+            LunarUtil.POSITION_CAI[_dayGanIndex + 1]
+        }
+    }
+
+    public var dayPositionCaiDesc: String {
+        get {
+            LunarUtil.POSITION_DESC[dayPositionCai]!
+        }
+    }
+
+    public var timePositionXi: String {
+        get {
+            LunarUtil.POSITION_XI[_timeGanIndex + 1]
+        }
+    }
+
+    public var timePositionXiDesc: String {
+        get {
+            LunarUtil.POSITION_DESC[timePositionXi]!
+        }
+    }
+
+    public var timePositionYangGui: String {
+        get {
+            LunarUtil.POSITION_YANG_GUI[_timeGanIndex + 1]
+        }
+    }
+
+    public var timePositionYangGuiDesc: String {
+        get {
+            LunarUtil.POSITION_DESC[timePositionYangGui]!
+        }
+    }
+
+    public var timePositionYinGui: String {
+        get {
+            LunarUtil.POSITION_YIN_GUI[_timeGanIndex + 1]
+        }
+    }
+
+    public var timePositionYinGuiDesc: String {
+        get {
+            LunarUtil.POSITION_DESC[timePositionYinGui]!
+        }
+    }
+
+    public var timePositionFu: String {
+        get {
+            getTimePositionFu(sect: 2)
+        }
+    }
+
+    public var timePositionFuDesc: String {
+        get {
+            getTimePositionFuDesc(sect: 2)
+        }
+    }
+
+    public func getTimePositionFu(sect: Int) -> String {
+        (1 == sect ? LunarUtil.POSITION_FU : LunarUtil.POSITION_FU_2)[_timeGanIndex + 1]
+    }
+
+    public func getTimePositionFuDesc(sect: Int) -> String {
+        LunarUtil.POSITION_DESC[getTimePositionFu(sect: sect)]!
+    }
+
+    public var timePositionCai: String {
+        get {
+            LunarUtil.POSITION_CAI[_timeGanIndex + 1]
+        }
+    }
+
+    public var timePositionCaiDesc: String {
+        get {
+            LunarUtil.POSITION_DESC[timePositionCai]!
+        }
+    }
+
+    public var zhiXing: String {
+        get {
+            var offset = _dayZhiIndex - _monthZhiIndex
+            if offset < 0 {
+                offset += 12
+            }
+            return LunarUtil.ZHI_XING[offset + 1]
+        }
+    }
+
+    public var dayTianShen: String {
+        get {
+            LunarUtil.TIAN_SHEN[(_dayZhiIndex + LunarUtil.ZHI_TIAN_SHEN_OFFSET[monthZhi]!) % 12 + 1]
+        }
+    }
+
+    public var dayTianShenType: String {
+        get {
+            LunarUtil.TIAN_SHEN_TYPE[dayTianShen]!
+        }
+    }
+
+    public var dayTianShenLuck: String {
+        get {
+            LunarUtil.TIAN_SHEN_TYPE_LUCK[dayTianShenType]!
+        }
+    }
+
+    public var timeTianShen: String {
+        get {
+            LunarUtil.TIAN_SHEN[(_timeZhiIndex + LunarUtil.ZHI_TIAN_SHEN_OFFSET[dayZhiExact]!) % 12 + 1]
+        }
+    }
+
+    public var timeTianShenType: String {
+        get {
+            LunarUtil.TIAN_SHEN_TYPE[timeTianShen]!
+        }
+    }
+
+    public var timeTianShenLuck: String {
+        get {
+            LunarUtil.TIAN_SHEN_TYPE_LUCK[timeTianShenType]!
+        }
+    }
+
+    public var monthPositionTai: String {
+        get {
+            if _month < 0 {
+                return "";
+            }
+            return LunarUtil.POSITION_TAI_MONTH[_month - 1]
+        }
+    }
+
+    public var dayPositionTai: String {
+        get {
+            LunarUtil.POSITION_TAI_DAY[LunarUtil.getJiaZiIndex(ganZhi: dayInGanZhi)]
+        }
+    }
+
+    public var dayYi: [String] {
+        get {
+            getDayYi(sect:1)
+        }
+    }
+
+    public func getDayYi(sect: Int) -> [String] {
+        LunarUtil.getDayYi(monthGanZhi: 2 == sect ? monthInGanZhiExact : monthInGanZhi, dayGanZhi: dayInGanZhi)
+    }
+
+    public var dayJi: [String] {
+        get {
+            getDayJi(sect:1)
+        }
+    }
+
+    public func getDayJi(sect: Int) -> [String] {
+        LunarUtil.getDayJi(monthGanZhi: 2 == sect ? monthInGanZhiExact : monthInGanZhi, dayGanZhi: dayInGanZhi)
+    }
+
+    public var dayChong: String {
+        get {
+            LunarUtil.CHONG[_dayZhiIndex]
+        }
+    }
+
+    public var daySha: String {
+        get {
+            LunarUtil.SHA[dayZhi]!
+        }
+    }
+
+    public var dayChongShengXiao: String {
+        get {
+            for i in (0..<LunarUtil.ZHI.count) {
+                if LunarUtil.ZHI[i] == dayChong {
+                    return LunarUtil.SHENG_XIAO[i]
+                }
+            }
+            return ""
+        }
+    }
+
+    public var dayChongGan: String {
+        get {
+            LunarUtil.CHONG_GAN[_dayGanIndex]
+        }
+    }
+
+    public var dayChongGanTie: String {
+        get {
+            LunarUtil.CHONG_GAN_TIE[_dayGanIndex]
+        }
+    }
+
+    public var dayChongDesc: String {
+        get {
+            "(\(dayChongGan)\(dayChong)\(dayChongShengXiao)"
+        }
+    }
+
+    public var timeChong: String {
+        get {
+            LunarUtil.CHONG[_timeZhiIndex]
+        }
+    }
+
+    public var timeSha: String {
+        get {
+            LunarUtil.SHA[timeZhi]!
+        }
+    }
+
+    public var timeChongShengXiao: String {
+        get {
+            for i in (0..<LunarUtil.ZHI.count) {
+                if LunarUtil.ZHI[i] == timeChong {
+                    return LunarUtil.SHENG_XIAO[i]
+                }
+            }
+            return ""
+        }
+    }
+
+    public var timeChongGan: String {
+        get {
+            LunarUtil.CHONG_GAN[_timeGanIndex]
+        }
+    }
+
+    public var timeChongGanTie: String {
+        get {
+            LunarUtil.CHONG_GAN_TIE[_timeGanIndex]
+        }
+    }
+
+    public var yueXiang: String {
+        get {
+            LunarUtil.YUE_XIANG[_day]
+        }
+    }
+
+    public var timeChongDesc: String {
+        get {
+            "(\(timeChongGan)\(timeChong)\(timeChongShengXiao)"
+        }
+    }
+
+    public var jie: String {
+        get {
+            for i in stride(from: 0, to: Lunar.JIE_QI_IN_USE.count, by: 2) {
+                let key = Lunar.JIE_QI_IN_USE[i]
+                let d = _jieQi[key]!
+                if d.year == _solar.year && d.month == _solar.month && d.day == _solar.day {
+                    return Lunar.convertJieQi(name: key);
+                }
+            }
+            return ""
+        }
+    }
+
+    public var qi: String {
+        get {
+            for i in stride(from: 1, to: Lunar.JIE_QI_IN_USE.count, by: 2) {
+                let key = Lunar.JIE_QI_IN_USE[i]
+                let d = _jieQi[key]!
+                if d.year == _solar.year && d.month == _solar.month && d.day == _solar.day {
+                    return Lunar.convertJieQi(name: key);
+                }
+            }
+            return ""
         }
     }
 
@@ -920,6 +1324,13 @@ public class Lunar: NSObject {
             if !jieQi.isEmpty {
                 s += " [\(jieQi)]"
             }
+            s += " \(gong)方\(shou) 星宿[\(xiu)\(zheng)\(animal)](\(xiuLuck)) 彭祖百忌[\(pengZuGan) \(pengZuZhi)]"
+            s += " 喜神方位[\(dayPositionXi)](\(dayPositionXiDesc))"
+            s += " 阳贵神方位[\(dayPositionYangGui)](\(dayPositionYangGuiDesc))"
+            s += " 阴贵神方位[\(dayPositionYinGui)](\(dayPositionYinGuiDesc))"
+            s += " 福神方位[\(dayPositionFu)](\(dayPositionFuDesc))"
+            s += " 财神方位[\(dayPositionCai)](\(dayPositionCaiDesc))"
+            s += " 冲[\(dayChongDesc)] 煞[\(daySha)]"
             return s
         }
     }
@@ -1021,6 +1432,123 @@ public class Lunar: NSObject {
             return nil
         }
         return JieQi(name: name, solar: near!)
+    }
+
+    public var yearXun: String {
+        get {
+            LunarUtil.getXun(ganZhi: yearInGanZhi)
+        }
+    }
+
+    public var yearXunByLiChun: String {
+        get {
+            LunarUtil.getXun(ganZhi: yearInGanZhiByLiChun)
+        }
+    }
+
+    public var yearXunExact: String {
+        get {
+            LunarUtil.getXun(ganZhi: yearInGanZhiExact)
+        }
+    }
+
+    public var yearXunKong: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: yearInGanZhi)
+        }
+    }
+
+    public var yearXunKongByLiChun: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: yearInGanZhiByLiChun)
+        }
+    }
+
+    public var yearXunKongExact: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: yearInGanZhiExact)
+        }
+    }
+
+    public var monthXun: String {
+        get {
+            LunarUtil.getXun(ganZhi: monthInGanZhi)
+        }
+    }
+
+    public var monthXunExact: String {
+        get {
+            LunarUtil.getXun(ganZhi: monthInGanZhiExact)
+        }
+    }
+
+    public var monthXunKong: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: monthInGanZhi)
+        }
+    }
+
+    public var monthXunKongExact: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: monthInGanZhiExact)
+        }
+    }
+
+    public var dayXun: String {
+        get {
+            LunarUtil.getXun(ganZhi: dayInGanZhi)
+        }
+    }
+
+    public var dayXunExact: String {
+        get {
+            LunarUtil.getXun(ganZhi: dayInGanZhiExact)
+        }
+    }
+
+    public var dayXunExact2: String {
+        get {
+            LunarUtil.getXun(ganZhi: dayInGanZhiExact2)
+        }
+    }
+
+    public var dayXunKong: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: dayInGanZhi)
+        }
+    }
+
+    public var dayXunKongExact: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: dayInGanZhiExact)
+        }
+    }
+
+    public var dayXunKongExact2: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: dayInGanZhiExact2)
+        }
+    }
+
+    public var timeXun: String {
+        get {
+            LunarUtil.getXun(ganZhi: timeInGanZhi)
+        }
+    }
+
+    public var timeXunKong: String {
+        get {
+            LunarUtil.getXunKong(ganZhi: timeInGanZhi)
+        }
+    }
+
+    public var eightChar: EightChar {
+        get {
+            if nil == _eightChar {
+                _eightChar = EightChar(lunar: self)
+            }
+            return _eightChar!
+        }
     }
 
 }

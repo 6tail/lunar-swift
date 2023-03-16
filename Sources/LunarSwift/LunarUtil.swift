@@ -906,12 +906,11 @@ public class LunarUtil {
             s = String(s.prefix(5))
         }
         var x = 1
-        for var i in (1...22) {
+        for i in stride(from: 1, to: 22, by: 2) {
             if hm >= String(format: "%02d:00", i) && hm <= String(format: "%02d:59", i + 1) {
                 return x
             }
             x += 1
-            i += 2
         }
         return 0
     }
@@ -921,7 +920,7 @@ public class LunarUtil {
     }
 
     private class func hex(n: Int) -> String {
-        String(n, radix: 16)
+        String(format: "%02X", n)
     }
 
     public class func getJiaZiIndex(ganZhi: String) -> Int {
@@ -965,6 +964,89 @@ public class LunarUtil {
 
     public class func getXunKong(ganZhi: String) -> String {
         XUN_KONG[getXunIndex(ganZhi: ganZhi)]
+    }
+
+    public class func getDayYi(monthGanZhi: String, dayGanZhi: String) -> [String] {
+        var l = [String]()
+        let day = hex(n: getJiaZiIndex(ganZhi: dayGanZhi))
+        let month = hex(n: getJiaZiIndex(ganZhi: monthGanZhi))
+        var right = DAY_YI_JI
+        var index = right.range(of: "\(day)=")
+        while nil != index {
+            right = String(right.suffix(from: index!.lowerBound))
+            var size = right.count
+            right = String(right.suffix(size - 3))
+            var left = right
+            if left.contains("=") {
+                left = String(left.prefix(upTo: left.range(of: "=")!.lowerBound))
+                size = left.count
+                left = String(left.prefix(size - 2))
+            }
+            var matched = false
+            let months = left.prefix(upTo: left.range(of: ":")!.lowerBound)
+            for i in stride(from: 0, to: months.count, by: 2) {
+                if month == String(months[months.index(months.startIndex, offsetBy: i)..<months.index(months.startIndex, offsetBy: i + 2)]) {
+                    matched = true
+                    break
+                }
+            }
+            if matched {
+                var ys = left.suffix(from: left.range(of: ":")!.lowerBound)
+                size = ys.count
+                ys = ys.suffix(size - 1)
+                ys = ys.prefix(upTo: ys.range(of: ",")!.lowerBound)
+                for i in stride(from: 0, to: ys.count, by: 2) {
+                    l.append(YI_JI[Int(String(ys[ys.index(ys.startIndex, offsetBy: i)..<ys.index(ys.startIndex, offsetBy: i + 2)]), radix: 16)!])
+                }
+                break
+            }
+            index = right.range(of: "\(day)=")
+        }
+        if l.isEmpty {
+            l.append("无")
+        }
+        return l
+    }
+
+    public class func getDayJi(monthGanZhi: String, dayGanZhi: String) -> [String] {
+        var l = [String]()
+        let day = hex(n: getJiaZiIndex(ganZhi: dayGanZhi))
+        let month = hex(n: getJiaZiIndex(ganZhi: monthGanZhi))
+        var right = DAY_YI_JI
+        var index = right.range(of: "\(day)=")
+        while nil != index {
+            right = String(right.suffix(from: index!.lowerBound))
+            var size = right.count
+            right = String(right.suffix(size - 3))
+            var left = right
+            if left.contains("=") {
+                left = String(left.prefix(upTo: left.range(of: "=")!.lowerBound))
+                size = left.count
+                left = String(left.prefix(size - 2))
+            }
+            var matched = false
+            let months = left.prefix(upTo: left.range(of: ":")!.lowerBound)
+            for i in stride(from: 0, to: months.count, by: 2) {
+                if month == String(months[months.index(months.startIndex, offsetBy: i)..<months.index(months.startIndex, offsetBy: i + 2)]) {
+                    matched = true
+                    break
+                }
+            }
+            if matched {
+                var js = left.suffix(from: left.range(of: ",")!.lowerBound)
+                size = js.count
+                js = js.suffix(size - 1)
+                for i in stride(from: 0, to: js.count, by: 2) {
+                    l.append(YI_JI[Int(String(js[js.index(js.startIndex, offsetBy: i)..<js.index(js.startIndex, offsetBy: i + 2)]), radix: 16)!])
+                }
+                break
+            }
+            index = right.range(of: "\(day)=")
+        }
+        if l.isEmpty {
+            l.append("无")
+        }
+        return l
     }
 
 }
