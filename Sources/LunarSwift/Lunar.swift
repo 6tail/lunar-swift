@@ -961,6 +961,18 @@ public class Lunar: NSObject {
         LunarUtil.getDayJi(monthGanZhi: 2 == sect ? monthInGanZhiExact : monthInGanZhi, dayGanZhi: dayInGanZhi)
     }
 
+    public var dayJiShen: [String] {
+        get {
+            LunarUtil.getDayJiShen(lunarMonth: _month, dayGanZhi: dayInGanZhi)
+        }
+    }
+
+    public var dayXiongSha: [String] {
+        get {
+            LunarUtil.getDayXiongSha(lunarMonth: _month, dayGanZhi: dayInGanZhi)
+        }
+    }
+
     public var dayChong: String {
         get {
             LunarUtil.CHONG[_dayZhiIndex]
@@ -998,7 +1010,7 @@ public class Lunar: NSObject {
 
     public var dayChongDesc: String {
         get {
-            "(\(dayChongGan)\(dayChong)\(dayChongShengXiao)"
+            "(\(dayChongGan)\(dayChong))\(dayChongShengXiao)"
         }
     }
 
@@ -1045,7 +1057,7 @@ public class Lunar: NSObject {
 
     public var timeChongDesc: String {
         get {
-            "(\(timeChongGan)\(timeChong)\(timeChongShengXiao)"
+            "(\(timeChongGan)\(timeChong))\(timeChongShengXiao)"
         }
     }
 
@@ -1336,7 +1348,7 @@ public class Lunar: NSObject {
     }
 
     public func next(days: Int) -> Lunar {
-        _solar.next(days: 1).lunar
+        _solar.next(days: days).lunar
     }
 
     public func getNextJie(wholeDay: Bool = false) -> JieQi? {
@@ -1548,6 +1560,17 @@ public class Lunar: NSObject {
                 _eightChar = EightChar(lunar: self)
             }
             return _eightChar!
+        }
+    }
+
+    public var times: [LunarTime] {
+        get {
+            var l = [LunarTime]()
+            l.append(LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: 0, minute: 0, second: 0))
+            for i in (0..<12) {
+                l.append(LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: (i + 1) * 2 - 1, minute: 0, second: 0))
+            }
+            return l
         }
     }
 

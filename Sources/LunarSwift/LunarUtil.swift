@@ -974,13 +974,11 @@ public class LunarUtil {
         var index = right.range(of: "\(day)=")
         while nil != index {
             right = String(right.suffix(from: index!.lowerBound))
-            var size = right.count
-            right = String(right.suffix(size - 3))
+            right = String(right.suffix(right.count - 3))
             var left = right
             if left.contains("=") {
                 left = String(left.prefix(upTo: left.range(of: "=")!.lowerBound))
-                size = left.count
-                left = String(left.prefix(size - 2))
+                left = String(left.prefix(left.count - 2))
             }
             var matched = false
             let months = left.prefix(upTo: left.range(of: ":")!.lowerBound)
@@ -992,8 +990,7 @@ public class LunarUtil {
             }
             if matched {
                 var ys = left.suffix(from: left.range(of: ":")!.lowerBound)
-                size = ys.count
-                ys = ys.suffix(size - 1)
+                ys = ys.suffix(ys.count - 1)
                 ys = ys.prefix(upTo: ys.range(of: ",")!.lowerBound)
                 for i in stride(from: 0, to: ys.count, by: 2) {
                     l.append(YI_JI[Int(String(ys[ys.index(ys.startIndex, offsetBy: i)..<ys.index(ys.startIndex, offsetBy: i + 2)]), radix: 16)!])
@@ -1016,13 +1013,11 @@ public class LunarUtil {
         var index = right.range(of: "\(day)=")
         while nil != index {
             right = String(right.suffix(from: index!.lowerBound))
-            var size = right.count
-            right = String(right.suffix(size - 3))
+            right = String(right.suffix(right.count - 3))
             var left = right
             if left.contains("=") {
                 left = String(left.prefix(upTo: left.range(of: "=")!.lowerBound))
-                size = left.count
-                left = String(left.prefix(size - 2))
+                left = String(left.prefix(left.count - 2))
             }
             var matched = false
             let months = left.prefix(upTo: left.range(of: ":")!.lowerBound)
@@ -1034,14 +1029,117 @@ public class LunarUtil {
             }
             if matched {
                 var js = left.suffix(from: left.range(of: ",")!.lowerBound)
-                size = js.count
-                js = js.suffix(size - 1)
+                js = js.suffix(js.count - 1)
                 for i in stride(from: 0, to: js.count, by: 2) {
                     l.append(YI_JI[Int(String(js[js.index(js.startIndex, offsetBy: i)..<js.index(js.startIndex, offsetBy: i + 2)]), radix: 16)!])
                 }
                 break
             }
             index = right.range(of: "\(day)=")
+        }
+        if l.isEmpty {
+            l.append("无")
+        }
+        return l
+    }
+
+    public class func getDayJiShen(lunarMonth: Int, dayGanZhi: String) -> [String] {
+        var l = [String]()
+        let day = hex(n: getJiaZiIndex(ganZhi: dayGanZhi))
+        let month = String(abs(lunarMonth), radix: 16)
+        var right = DAY_SHEN_SHA
+        let index = right.range(of: "\(month)\(day)=")
+        if nil != index {
+            right = String(right.suffix(from: index!.lowerBound))
+            var size = right.count
+            right = String(right.suffix(size - 4))
+            var left = right
+            if left.contains("=") {
+                left = String(left.prefix(upTo: left.range(of: "=")!.lowerBound))
+                size = left.count
+                left = String(left.prefix(size - 3))
+            }
+            let js = left.prefix(upTo: left.range(of: ",")!.lowerBound)
+            for i in stride(from: 0, to: js.count, by: 2) {
+                l.append(SHEN_SHA[Int(String(js[js.index(js.startIndex, offsetBy: i)..<js.index(js.startIndex, offsetBy: i + 2)]), radix: 16)!])
+            }
+        }
+        if l.isEmpty {
+            l.append("无")
+        }
+        return l
+    }
+
+    public class func getDayXiongSha(lunarMonth: Int, dayGanZhi: String) -> [String] {
+        var l = [String]()
+        let day = hex(n: getJiaZiIndex(ganZhi: dayGanZhi))
+        let month = String(abs(lunarMonth), radix: 16)
+        var right = DAY_SHEN_SHA
+        let index = right.range(of: "\(month)\(day)=")
+        if nil != index {
+            right = String(right.suffix(from: index!.lowerBound))
+            right = String(right.suffix(right.count - 4))
+            var left = right
+            if left.contains("=") {
+                left = String(left.prefix(upTo: left.range(of: "=")!.lowerBound))
+                left = String(left.prefix(left.count - 3))
+            }
+            var xs = left.suffix(from: left.range(of: ",")!.lowerBound)
+            xs = xs.suffix(xs.count - 1)
+            for i in stride(from: 0, to: xs.count, by: 2) {
+                l.append(SHEN_SHA[Int(String(xs[xs.index(xs.startIndex, offsetBy: i)..<xs.index(xs.startIndex, offsetBy: i + 2)]), radix: 16)!])
+            }
+        }
+        if l.isEmpty {
+            l.append("无")
+        }
+        return l
+    }
+
+    public class func getTimeYi(dayGanZhi: String, timeGanZhi: String) -> [String] {
+        var l = [String]()
+        let day = hex(n: getJiaZiIndex(ganZhi: dayGanZhi))
+        let time = hex(n: getJiaZiIndex(ganZhi: timeGanZhi))
+        var right = TIME_YI_JI
+        let index = right.range(of: "\(day)\(time)=")
+        if nil != index {
+            right = String(right.suffix(from: index!.lowerBound))
+            right = String(right.suffix(right.count - 5))
+            var left = right
+            if left.contains("=") {
+                left = String(left.prefix(upTo: left.range(of: "=")!.lowerBound))
+                left = String(left.prefix(left.count - 4))
+            }
+            let ys = left.prefix(upTo: left.range(of: ",")!.lowerBound)
+            for i in stride(from: 0, to: ys.count, by: 2) {
+                l.append(YI_JI[Int(String(ys[ys.index(ys.startIndex, offsetBy: i)..<ys.index(ys.startIndex, offsetBy: i + 2)]), radix: 16)!])
+            }
+        }
+        if l.isEmpty {
+            l.append("无")
+        }
+        return l
+    }
+
+    public class func getTimeJi(dayGanZhi: String, timeGanZhi: String) -> [String] {
+        var l = [String]()
+        let day = hex(n: getJiaZiIndex(ganZhi: dayGanZhi))
+        let time = hex(n: getJiaZiIndex(ganZhi: timeGanZhi))
+        var right = TIME_YI_JI
+        let index = right.range(of: "\(day)\(time)=")
+        if nil != index {
+            right = String(right.suffix(from: index!.lowerBound))
+            right = String(right.suffix(right.count - 5))
+            var left = right
+            if left.contains("=") {
+                left = String(left.prefix(upTo: left.range(of: "=")!.lowerBound))
+                left = String(left.prefix(left.count - 4))
+            }
+            var js = left.suffix(from: left.range(of: ",")!.lowerBound)
+            js = js.suffix(js.count - 1)
+            for i in stride(from: 0, to: js.count, by: 2) {
+                l.append(YI_JI[Int(String(js[js.index(js.startIndex, offsetBy: i)..<js.index(js.startIndex, offsetBy: i + 2)]), radix: 16)!])
+            }
         }
         if l.isEmpty {
             l.append("无")
