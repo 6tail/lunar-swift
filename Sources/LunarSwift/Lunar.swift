@@ -1139,6 +1139,18 @@ public class Lunar: NSObject {
         }
     }
 
+    public var prevJieQi: JieQi {
+        get {
+            getPrevJieQi(wholeDay: false)!
+        }
+    }
+
+    public var nextJieQi: JieQi {
+        get {
+            getNextJieQi(wholeDay: false)!
+        }
+    }
+
     public var shuJiu: ShuJiu? {
         get {
             let current = Solar.fromYmdHms(year: solar.year, month: solar.month, day: solar.day)
@@ -1226,7 +1238,7 @@ public class Lunar: NSObject {
 
     public var wuHou: String {
         get {
-            let jieQi = getPrevJie(wholeDay: true)!
+            let jieQi = getPrevJieQi(wholeDay: true)!
             var offset = 0
             for i in (0..<Lunar.JIE_QI.count) {
                 if jieQi.name == Lunar.JIE_QI[i] {
@@ -1244,10 +1256,10 @@ public class Lunar: NSObject {
 
     public var hou: String {
         get {
-            let jieQi = getPrevJie(wholeDay: true)!
+            let jieQi = getPrevJieQi(wholeDay: true)!
             let max = LunarUtil.HOU.count - 1
             var offset = solar.subtract(solar: jieQi.solar) / 5
-            if (offset > max) {
+            if offset > max {
                 offset = max
             }
             return "\(jieQi.name) \(LunarUtil.HOU[offset])"
@@ -1259,7 +1271,7 @@ public class Lunar: NSObject {
             let gan = LunarUtil.LU[dayGan]!
             let zhi = LunarUtil.LU[dayZhi]
             var lu = "\(gan)命互禄"
-            if (nil != zhi) {
+            if nil != zhi {
                 lu += " \(zhi!)命进禄"
             }
             return lu
@@ -1351,6 +1363,10 @@ public class Lunar: NSObject {
         _solar.next(days: days).lunar
     }
 
+    public func getNextJieQi(wholeDay: Bool = false) -> JieQi? {
+        getNearJieQi(forward: true, conditions: nil, wholeDay: wholeDay)
+    }
+
     public func getNextJie(wholeDay: Bool = false) -> JieQi? {
         let l = Lunar.JIE_QI_IN_USE.count / 2
         var conditions = [String]()
@@ -1358,6 +1374,10 @@ public class Lunar: NSObject {
             conditions.append(Lunar.JIE_QI_IN_USE[i*2])
         }
         return getNearJieQi(forward: true, conditions: conditions, wholeDay: wholeDay)
+    }
+
+    public func getPrevJieQi(wholeDay: Bool = false) -> JieQi? {
+        getNearJieQi(forward: false, conditions: nil, wholeDay: wholeDay)
     }
 
     public func getPrevJie(wholeDay: Bool = false) -> JieQi? {

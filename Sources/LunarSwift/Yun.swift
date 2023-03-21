@@ -122,7 +122,7 @@ public class Yun: NSObject {
         }
     }
 
-    func getDaYun(n: Int = 10) -> [DaYun] {
+    public func getDaYun(n: Int = 10) -> [DaYun] {
         var l = [DaYun]()
         for i in (0..<n) {
             l.append(DaYun(yun: self, index: i))
