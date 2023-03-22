@@ -1583,6 +1583,12 @@ public class Lunar: NSObject {
         }
     }
 
+    public var time: LunarTime {
+        get {
+            LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: _hour, minute: _minute, second: _second)
+        }
+    }
+
     public var times: [LunarTime] {
         get {
             var l = [LunarTime]()

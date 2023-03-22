@@ -433,7 +433,7 @@ public class Solar: NSObject {
             while rest > 0 {
                 solar = solar.nextDay(days: add)
                 var work = true
-                let holiday = HolidayUtil.getHoliday(year: solar.year, month: solar.month, day: solar.day)
+                let holiday = HolidayUtil.getHolidayByYmd(year: solar.year, month: solar.month, day: solar.day)
                 if nil == holiday {
                     let week = solar.week
                     if 0 == week || 6 == week {
