@@ -165,6 +165,7 @@ public class Solar: NSObject {
             if LunarUtil.ZHI[i] == timeZhi
             {
                 hours.append((i - 1) * 2)
+                break
             }
         }
         if "子" == timeZhi

@@ -179,17 +179,20 @@ public class LunarYear: NSObject {
 
         var y = prevYear
         var m = 11
+        var index = m
         for i in (0..<15) {
             var cm = m
             if y == leapYear && i == leapIndex {
                 cm = -cm
             }
-            _months.append(LunarMonth(lunarYear: y, lunarMonth: cm, dayCount: dayCounts[i], firstJulianDay: hs[i] + Solar.J2000))
+            _months.append(LunarMonth(lunarYear: y, lunarMonth: cm, dayCount: dayCounts[i], firstJulianDay: hs[i] + Solar.J2000, index: index))
             if y != leapYear || i + 1 != leapIndex {
                 m += 1
             }
+            index += 1
             if m == 13 {
                 m = 1
+                index = 1
                 y += 1
             }
         }

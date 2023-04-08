@@ -73,7 +73,7 @@ public class Foto: NSObject {
     public var festivals: [FotoFestival] {
         get {
             var l = [FotoFestival]()
-            let f = FotoUtil.FESTIVAL["\(month)-\(day)"]
+            let f = FotoUtil.FESTIVAL["\(abs(month))-\(day)"]
             if nil != f {
                 for o in f! {
                     var result = ""
@@ -90,6 +90,20 @@ public class Foto: NSObject {
                         remark = o[3]
                     }
                     l.append(FotoFestival(name: o[0], result: result, everyMonth: everyMonth, remark: remark))
+                }
+            }
+            return l
+        }
+    }
+    
+    public var otherFestivals: [String] {
+        get {
+            var l = [String]()
+            //获取几月几日对应的节日
+            let fs = FotoUtil.OTHER_FESTIVAL["\(month)-\(day)"]
+            if nil != fs {
+                for f in fs! {
+                    l.append(f)
                 }
             }
             return l
