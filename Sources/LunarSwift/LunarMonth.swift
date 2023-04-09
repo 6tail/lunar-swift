@@ -10,46 +10,32 @@ public class LunarMonth: NSObject {
     private var _firstJulianDay: Double
 
     public var year: Int {
-        get {
-            _year
-        }
+        _year
     }
 
     public var month: Int {
-        get {
-            _month
-        }
+        _month
     }
 
     public var dayCount: Int {
-        get {
-            _dayCount
-        }
+        _dayCount
     }
-    
+
     public var index: Int {
-        get {
-            _index
-        }
+        _index
     }
-    
+
     public var zhiIndex: Int {
-        get {
-            _zhiIndex
-        }
+        _zhiIndex
     }
-    
+
     public var ganIndex: Int {
-        get {
-            let offset = (LunarYear(lunarYear: _year).ganIndex + 1) % 5 * 2
-            return (_index - 1 + offset) % 10
-        }
+        let offset = (LunarYear(lunarYear: _year).ganIndex + 1) % 5 * 2
+        return (_index - 1 + offset) % 10
     }
 
     public var firstJulianDay: Double {
-        get {
-            _firstJulianDay
-        }
+        _firstJulianDay
     }
 
     public init(lunarYear: Int, lunarMonth: Int, dayCount: Int, firstJulianDay: Double, index: Int) {
@@ -66,86 +52,60 @@ public class LunarMonth: NSObject {
     }
 
     public var leap: Bool {
-        get {
-            _month < 0
-        }
+        _month < 0
     }
 
-    public override var description: String {
-        get {
-            var r = ""
-            if leap {
-                r = "闰"
-            }
-            let m = abs(_month)
-            return "\(_year)年\(r)\(LunarUtil.MONTH[m])月(\(_dayCount))天"
+    override public var description: String {
+        var r = ""
+        if leap {
+            r = "闰"
         }
+        let m = abs(_month)
+        return "\(_year)年\(r)\(LunarUtil.MONTH[m])月(\(_dayCount))天"
     }
-    
+
     public var gan: String {
-        get {
-            LunarUtil.GAN[ganIndex + 1]
-        }
+        LunarUtil.GAN[ganIndex + 1]
     }
 
     public var zhi: String {
-        get {
-            LunarUtil.ZHI[_zhiIndex + 1]
-        }
+        LunarUtil.ZHI[_zhiIndex + 1]
     }
 
     public var ganZhi: String {
-        get {
-            "\(gan)\(zhi)"
-        }
+        "\(gan)\(zhi)"
     }
-    
+
     public var positionXi: String {
-        get {
-            LunarUtil.POSITION_XI[ganIndex + 1]
-        }
+        LunarUtil.POSITION_XI[ganIndex + 1]
     }
 
     public var positionXiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[positionXi]!
-        }
+        LunarUtil.POSITION_DESC[positionXi]!
     }
 
     public var positionYangGui: String {
-        get {
-            LunarUtil.POSITION_YANG_GUI[ganIndex + 1]
-        }
+        LunarUtil.POSITION_YANG_GUI[ganIndex + 1]
     }
 
     public var positionYangGuiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[positionYangGui]!
-        }
+        LunarUtil.POSITION_DESC[positionYangGui]!
     }
 
     public var positionYinGui: String {
-        get {
-            LunarUtil.POSITION_YIN_GUI[ganIndex + 1]
-        }
+        LunarUtil.POSITION_YIN_GUI[ganIndex + 1]
     }
 
     public var positionYinGuiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[positionYinGui]!
-        }
+        LunarUtil.POSITION_DESC[positionYinGui]!
     }
 
     public var positionFu: String {
-        get {
-            getPositionFu(sect: 2)
-        }
+        getPositionFu(sect: 2)
     }
 
     public var positionFuDesc: String {
-        get {
-            getPositionFuDesc(sect: 2)
-        }
+        getPositionFuDesc(sect: 2)
     }
 
     public func getPositionFu(sect: Int) -> String {
@@ -157,15 +117,21 @@ public class LunarMonth: NSObject {
     }
 
     public var positionCai: String {
-        get {
-            LunarUtil.POSITION_CAI[ganIndex + 1]
-        }
+        LunarUtil.POSITION_CAI[ganIndex + 1]
     }
 
     public var positionCaiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[positionCai]!
-        }
+        LunarUtil.POSITION_DESC[positionCai]!
     }
 
+    public var nineStar: NineStar {
+        let index = LunarYear.fromYear(lunarYear: _year).zhiIndex % 3
+        let m = abs(_month)
+        let monthZhiIndex = (13 + m) % 12
+        var n = 27 - index * 3
+        if monthZhiIndex < LunarUtil.BASE_MONTH_ZHI_INDEX {
+            n -= 3
+        }
+        return NineStar(index: (n - monthZhiIndex) % 9 - 1)
+    }
 }

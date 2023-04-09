@@ -35,159 +35,107 @@ public class Lunar: NSObject {
     private var _eightChar: EightChar?
 
     public var year: Int {
-        get {
-            _year
-        }
+        _year
     }
 
     public var month: Int {
-        get {
-            _month
-        }
+        _month
     }
 
     public var day: Int {
-        get {
-            _day
-        }
+        _day
     }
 
     public var hour: Int {
-        get {
-            _hour
-        }
+        _hour
     }
 
     public var minute: Int {
-        get {
-            _minute
-        }
+        _minute
     }
 
     public var second: Int {
-        get {
-            _second
-        }
+        _second
     }
 
     public var yearGanIndex: Int {
-        get {
-            _yearGanIndex
-        }
+        _yearGanIndex
     }
 
     public var yearZhiIndex: Int {
-        get {
-            _yearZhiIndex
-        }
+        _yearZhiIndex
     }
 
     public var yearGanIndexByLiChun: Int {
-        get {
-            _yearGanIndexByLiChun
-        }
+        _yearGanIndexByLiChun
     }
 
     public var yearZhiIndexByLiChun: Int {
-        get {
-            _yearZhiIndexByLiChun
-        }
+        _yearZhiIndexByLiChun
     }
 
     public var yearGanIndexExact: Int {
-        get {
-            _yearGanIndexExact
-        }
+        _yearGanIndexExact
     }
 
     public var yearZhiIndexExact: Int {
-        get {
-            _yearZhiIndexExact
-        }
+        _yearZhiIndexExact
     }
 
     public var monthGanIndex: Int {
-        get {
-            _monthGanIndex
-        }
+        _monthGanIndex
     }
 
     public var monthZhiIndex: Int {
-        get {
-            _monthZhiIndex
-        }
+        _monthZhiIndex
     }
 
     public var monthGanIndexExact: Int {
-        get {
-            _monthGanIndexExact
-        }
+        _monthGanIndexExact
     }
 
     public var monthZhiIndexExact: Int {
-        get {
-            _monthZhiIndexExact
-        }
+        _monthZhiIndexExact
     }
 
     public var dayGanIndex: Int {
-        get {
-            _dayGanIndex
-        }
+        _dayGanIndex
     }
 
     public var dayZhiIndex: Int {
-        get {
-            _dayZhiIndex
-        }
+        _dayZhiIndex
     }
 
     public var dayGanIndexExact: Int {
-        get {
-            _dayGanIndexExact
-        }
+        _dayGanIndexExact
     }
 
     public var dayZhiIndexExact: Int {
-        get {
-            _dayZhiIndexExact
-        }
+        _dayZhiIndexExact
     }
 
     public var dayGanIndexExact2: Int {
-        get {
-            _dayGanIndexExact2
-        }
+        _dayGanIndexExact2
     }
 
     public var dayZhiIndexExact2: Int {
-        get {
-            _dayZhiIndexExact2
-        }
+        _dayZhiIndexExact2
     }
 
     public var timeGanIndex: Int {
-        get {
-            _timeGanIndex
-        }
+        _timeGanIndex
     }
 
     public var timeZhiIndex: Int {
-        get {
-            _timeZhiIndex
-        }
+        _timeZhiIndex
     }
 
     public var weekIndex: Int {
-        get {
-            _weekIndex
-        }
+        _weekIndex
     }
 
     public var solar: Solar {
-        get {
-            _solar
-        }
+        _solar
     }
 
     public init(lunarYear: Int, lunarMonth: Int, lunarDay: Int, hour: Int = 0, minute: Int = 0, second: Int = 0) {
@@ -217,12 +165,12 @@ public class Lunar: NSObject {
 
         let julianDays = y.jieQiJulianDays
         var table = [String: Solar]()
-        for i in (0..<Lunar.JIE_QI_IN_USE.count) {
+        for i in 0 ..< Lunar.JIE_QI_IN_USE.count {
             table[Lunar.JIE_QI_IN_USE[i]] = Solar.fromJulianDay(julianDay: julianDays[i])
         }
         _jieQi = table
 
-        //以正月初一开始
+        // 以正月初一开始
         var offset = _year - 4
         _yearGanIndex = offset % 10
         _yearZhiIndex = offset % 12
@@ -235,11 +183,11 @@ public class Lunar: NSObject {
             _yearZhiIndex += 12
         }
 
-        //以立春作为新一年的开始的干支纪年
+        // 以立春作为新一年的开始的干支纪年
         var g = _yearGanIndex
         var z = _yearZhiIndex
 
-        //精确的干支纪年，以立春交接时刻为准
+        // 精确的干支纪年，以立春交接时刻为准
         var gExact = _yearGanIndex
         var zExact = _yearZhiIndex
 
@@ -247,7 +195,7 @@ public class Lunar: NSObject {
         let solarYmd = _solar.ymd
         let solarYmdHms = _solar.ymdhms
 
-        //获取立春的阳历时刻
+        // 获取立春的阳历时刻
         var liChun = _jieQi["立春"]!
         if liChun.year != solarYear {
             liChun = _jieQi["LI_CHUN"]!
@@ -255,14 +203,14 @@ public class Lunar: NSObject {
         let liChunYmd = liChun.ymd
         let liChunYmdHms = liChun.ymdhms
 
-        //阳历和阴历年份相同代表正月初一及以后
+        // 阳历和阴历年份相同代表正月初一及以后
         if _year == solarYear {
-            //立春日期判断
+            // 立春日期判断
             if solarYmd < liChunYmd {
                 g -= 1
                 z -= 1
             }
-            //立春交接时刻判断
+            // 立春交接时刻判断
             if solarYmdHms < liChunYmdHms {
                 gExact -= 1
                 zExact -= 1
@@ -301,7 +249,7 @@ public class Lunar: NSObject {
         var end: Solar
 
         let size = Lunar.JIE_QI_IN_USE.count
-        //序号：大雪以前-3，大雪到小寒之间-2，小寒到立春之间-1，立春之后0
+        // 序号：大雪以前-3，大雪到小寒之间-2，小寒到立春之间-1，立春之后0
         var index = -3
         for i in stride(from: 0, to: size, by: 2) {
             let jie = Lunar.JIE_QI_IN_USE[i]
@@ -321,7 +269,7 @@ public class Lunar: NSObject {
             add = 1
         }
 
-        offset = (((_yearGanIndexByLiChun+add)%5 + 1) * 2) % 10
+        offset = (((_yearGanIndexByLiChun + add) % 5 + 1) * 2) % 10
         add = index
         if add < 0 {
             add += 10
@@ -354,7 +302,7 @@ public class Lunar: NSObject {
             add = 1
         }
 
-        offset = (((_yearGanIndexExact+add)%5 + 1) * 2) % 10
+        offset = (((_yearGanIndexExact + add) % 5 + 1) * 2) % 10
         add = index
         if add < 0 {
             add += 10
@@ -393,7 +341,7 @@ public class Lunar: NSObject {
         _dayZhiIndexExact = dayZhiExact
 
         _timeZhiIndex = LunarUtil.getTimeZhiIndex(hm: hm)
-        _timeGanIndex = (_dayGanIndexExact%5*2 + _timeZhiIndex) % 10
+        _timeGanIndex = (_dayGanIndexExact % 5 * 2 + _timeZhiIndex) % 10
         _weekIndex = _solar.week
     }
 
@@ -423,373 +371,253 @@ public class Lunar: NSObject {
     }
 
     public var yearInChinese: String {
-        get {
-            let y = "\(_year)"
-            var s = ""
-            for i in (0..<y.count) {
-                s += LunarUtil.NUMBER[Int(y[y.index(y.startIndex, offsetBy: i)].asciiValue!) - 48]
-            }
-            return s
+        let y = "\(_year)"
+        var s = ""
+        for i in 0 ..< y.count {
+            s += LunarUtil.NUMBER[Int(y[y.index(y.startIndex, offsetBy: i)].asciiValue!) - 48]
         }
+        return s
     }
 
     public var monthInChinese: String {
-        get {
-            var s = ""
-            if _month < 0 {
-                s += "闰"
-            }
-            s += LunarUtil.MONTH[abs(_month)]
-            return s
+        var s = ""
+        if _month < 0 {
+            s += "闰"
         }
+        s += LunarUtil.MONTH[abs(_month)]
+        return s
     }
 
     public var dayInChinese: String {
-        get {
-            LunarUtil.DAY[_day]
-        }
+        LunarUtil.DAY[_day]
     }
 
     public var yearGan: String {
-        get {
-            LunarUtil.GAN[_yearGanIndex + 1]
-        }
+        LunarUtil.GAN[_yearGanIndex + 1]
     }
 
     public var yearGanExact: String {
-        get {
-            LunarUtil.GAN[_yearGanIndexExact + 1]
-        }
+        LunarUtil.GAN[_yearGanIndexExact + 1]
     }
 
     public var yearGanByLiChun: String {
-        get {
-            LunarUtil.GAN[_yearGanIndexByLiChun + 1]
-        }
+        LunarUtil.GAN[_yearGanIndexByLiChun + 1]
     }
 
     public var yearZhi: String {
-        get {
-            LunarUtil.ZHI[_yearZhiIndex + 1]
-        }
+        LunarUtil.ZHI[_yearZhiIndex + 1]
     }
 
     public var yearZhiExact: String {
-        get {
-            LunarUtil.ZHI[_yearZhiIndexExact + 1]
-        }
+        LunarUtil.ZHI[_yearZhiIndexExact + 1]
     }
 
     public var yearZhiByLiChun: String {
-        get {
-            LunarUtil.ZHI[_yearZhiIndexByLiChun + 1]
-        }
+        LunarUtil.ZHI[_yearZhiIndexByLiChun + 1]
     }
 
     public var yearInGanZhi: String {
-        get {
-            "\(yearGan)\(yearZhi)"
-        }
+        "\(yearGan)\(yearZhi)"
     }
 
     public var yearInGanZhiExact: String {
-        get {
-            "\(yearGanExact)\(yearZhiExact)"
-        }
+        "\(yearGanExact)\(yearZhiExact)"
     }
 
     public var yearInGanZhiByLiChun: String {
-        get {
-            "\(yearGanByLiChun)\(yearZhiByLiChun)"
-        }
+        "\(yearGanByLiChun)\(yearZhiByLiChun)"
     }
 
     public var yearShengXiao: String {
-        get {
-            LunarUtil.SHENG_XIAO[_yearZhiIndex + 1]
-        }
+        LunarUtil.SHENG_XIAO[_yearZhiIndex + 1]
     }
 
     public var yearShengXiaoByLiChun: String {
-        get {
-            LunarUtil.SHENG_XIAO[_yearZhiIndexByLiChun + 1]
-        }
+        LunarUtil.SHENG_XIAO[_yearZhiIndexByLiChun + 1]
     }
 
     public var yearShengXiaoExact: String {
-        get {
-            LunarUtil.SHENG_XIAO[_yearZhiIndexExact + 1]
-        }
+        LunarUtil.SHENG_XIAO[_yearZhiIndexExact + 1]
     }
 
     public var monthGan: String {
-        get {
-            LunarUtil.GAN[_monthGanIndex + 1]
-        }
+        LunarUtil.GAN[_monthGanIndex + 1]
     }
 
     public var monthZhi: String {
-        get {
-            LunarUtil.ZHI[_monthZhiIndex + 1]
-        }
+        LunarUtil.ZHI[_monthZhiIndex + 1]
     }
 
     public var monthInGanZhi: String {
-        get {
-            "\(monthGan)\(monthZhi)"
-        }
+        "\(monthGan)\(monthZhi)"
     }
 
     public var monthGanExact: String {
-        get {
-            LunarUtil.GAN[_monthGanIndexExact + 1]
-        }
+        LunarUtil.GAN[_monthGanIndexExact + 1]
     }
 
     public var monthZhiExact: String {
-        get {
-            LunarUtil.ZHI[_monthZhiIndexExact + 1]
-        }
+        LunarUtil.ZHI[_monthZhiIndexExact + 1]
     }
 
     public var monthInGanZhiExact: String {
-        get {
-            "\(monthGanExact)\(monthZhiExact)"
-        }
+        "\(monthGanExact)\(monthZhiExact)"
     }
 
     public var monthShengXiao: String {
-        get {
-            LunarUtil.SHENG_XIAO[_monthZhiIndex + 1]
-        }
+        LunarUtil.SHENG_XIAO[_monthZhiIndex + 1]
     }
 
     public var dayGan: String {
-        get {
-            LunarUtil.GAN[_dayGanIndex + 1]
-        }
+        LunarUtil.GAN[_dayGanIndex + 1]
     }
 
     public var dayGanExact: String {
-        get {
-            LunarUtil.GAN[_dayGanIndexExact + 1]
-        }
+        LunarUtil.GAN[_dayGanIndexExact + 1]
     }
 
     public var dayGanExact2: String {
-        get {
-            LunarUtil.GAN[_dayGanIndexExact2 + 1]
-        }
+        LunarUtil.GAN[_dayGanIndexExact2 + 1]
     }
 
     public var dayZhi: String {
-        get {
-            LunarUtil.ZHI[_dayZhiIndex + 1]
-        }
+        LunarUtil.ZHI[_dayZhiIndex + 1]
     }
 
     public var dayZhiExact: String {
-        get {
-            LunarUtil.ZHI[_dayZhiIndexExact + 1]
-        }
+        LunarUtil.ZHI[_dayZhiIndexExact + 1]
     }
 
     public var dayZhiExact2: String {
-        get {
-            LunarUtil.ZHI[_dayZhiIndexExact2 + 1]
-        }
+        LunarUtil.ZHI[_dayZhiIndexExact2 + 1]
     }
 
     public var dayInGanZhi: String {
-        get {
-            "\(dayGan)\(dayZhi)"
-        }
+        "\(dayGan)\(dayZhi)"
     }
 
     public var dayInGanZhiExact: String {
-        get {
-            "\(dayGanExact)\(dayZhiExact)"
-        }
+        "\(dayGanExact)\(dayZhiExact)"
     }
 
     public var dayInGanZhiExact2: String {
-        get {
-            "\(dayGanExact2)\(dayZhiExact2)"
-        }
+        "\(dayGanExact2)\(dayZhiExact2)"
     }
 
     public var dayShengXiao: String {
-        get {
-            LunarUtil.SHENG_XIAO[_dayZhiIndex + 1]
-        }
+        LunarUtil.SHENG_XIAO[_dayZhiIndex + 1]
     }
 
     public var timeGan: String {
-        get {
-            LunarUtil.GAN[_timeGanIndex + 1]
-        }
+        LunarUtil.GAN[_timeGanIndex + 1]
     }
 
     public var timeZhi: String {
-        get {
-            LunarUtil.ZHI[_timeZhiIndex + 1]
-        }
+        LunarUtil.ZHI[_timeZhiIndex + 1]
     }
 
     public var timeInGanZhi: String {
-        get {
-            "\(timeGan)\(timeZhi)"
-        }
+        "\(timeGan)\(timeZhi)"
     }
 
     public var timeShengXiao: String {
-        get {
-            LunarUtil.SHENG_XIAO[_timeZhiIndex + 1]
-        }
+        LunarUtil.SHENG_XIAO[_timeZhiIndex + 1]
     }
 
     public var yearNaYin: String {
-        get {
-            LunarUtil.NAYIN[yearInGanZhi]!
-        }
+        LunarUtil.NAYIN[yearInGanZhi]!
     }
 
     public var monthNaYin: String {
-        get {
-            LunarUtil.NAYIN[monthInGanZhi]!
-        }
+        LunarUtil.NAYIN[monthInGanZhi]!
     }
 
     public var dayNaYin: String {
-        get {
-            LunarUtil.NAYIN[dayInGanZhi]!
-        }
+        LunarUtil.NAYIN[dayInGanZhi]!
     }
 
     public var timeNaYin: String {
-        get {
-            LunarUtil.NAYIN[timeInGanZhi]!
-        }
+        LunarUtil.NAYIN[timeInGanZhi]!
     }
 
     public var week: Int {
-        get {
-            _solar.week
-        }
+        _solar.week
     }
 
     public var weekInChinese: String {
-        get {
-            SolarUtil.WEEK[week]
-        }
+        SolarUtil.WEEK[week]
     }
 
     public var season: String {
-        get {
-            LunarUtil.SEASON[abs(_month)]
-        }
+        LunarUtil.SEASON[abs(_month)]
     }
 
     public var xiu: String {
-        get {
-            LunarUtil.XIU["\(dayZhi)\(week)"]!
-        }
+        LunarUtil.XIU["\(dayZhi)\(week)"]!
     }
 
     public var xiuLuck: String {
-        get {
-            LunarUtil.XIU_LUCK[xiu]!
-        }
+        LunarUtil.XIU_LUCK[xiu]!
     }
 
     public var xiuSong: String {
-        get {
-            LunarUtil.XIU_SONG[xiu]!
-        }
+        LunarUtil.XIU_SONG[xiu]!
     }
 
     public var zheng: String {
-        get {
-            LunarUtil.ZHENG[xiu]!
-        }
+        LunarUtil.ZHENG[xiu]!
     }
 
     public var animal: String {
-        get {
-            LunarUtil.ANIMAL[xiu]!
-        }
+        LunarUtil.ANIMAL[xiu]!
     }
 
     public var gong: String {
-        get {
-            LunarUtil.GONG[xiu]!
-        }
+        LunarUtil.GONG[xiu]!
     }
 
     public var shou: String {
-        get {
-            LunarUtil.SHOU[gong]!
-        }
+        LunarUtil.SHOU[gong]!
     }
 
     public var pengZuGan: String {
-        get {
-            LunarUtil.PENGZU_GAN[_dayGanIndex + 1]
-        }
+        LunarUtil.PENGZU_GAN[_dayGanIndex + 1]
     }
 
     public var pengZuZhi: String {
-        get {
-            LunarUtil.PENGZU_ZHI[_dayZhiIndex + 1]
-        }
+        LunarUtil.PENGZU_ZHI[_dayZhiIndex + 1]
     }
 
     public var dayPositionXi: String {
-        get {
-            LunarUtil.POSITION_XI[_dayGanIndex + 1]
-        }
+        LunarUtil.POSITION_XI[_dayGanIndex + 1]
     }
 
     public var dayPositionXiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[dayPositionXi]!
-        }
+        LunarUtil.POSITION_DESC[dayPositionXi]!
     }
 
     public var dayPositionYangGui: String {
-        get {
-            LunarUtil.POSITION_YANG_GUI[_dayGanIndex + 1]
-        }
+        LunarUtil.POSITION_YANG_GUI[_dayGanIndex + 1]
     }
 
     public var dayPositionYangGuiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[dayPositionYangGui]!
-        }
+        LunarUtil.POSITION_DESC[dayPositionYangGui]!
     }
 
     public var dayPositionYinGui: String {
-        get {
-            LunarUtil.POSITION_YIN_GUI[_dayGanIndex + 1]
-        }
+        LunarUtil.POSITION_YIN_GUI[_dayGanIndex + 1]
     }
 
     public var dayPositionYinGuiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[dayPositionYinGui]!
-        }
+        LunarUtil.POSITION_DESC[dayPositionYinGui]!
     }
 
     public var dayPositionFu: String {
-        get {
-            getDayPositionFu(sect: 2)
-        }
+        getDayPositionFu(sect: 2)
     }
 
     public var dayPositionFuDesc: String {
-        get {
-            getDayPositionFuDesc(sect: 2)
-        }
+        getDayPositionFuDesc(sect: 2)
     }
 
     public func getDayPositionFu(sect: Int) -> String {
@@ -801,63 +629,43 @@ public class Lunar: NSObject {
     }
 
     public var dayPositionCai: String {
-        get {
-            LunarUtil.POSITION_CAI[_dayGanIndex + 1]
-        }
+        LunarUtil.POSITION_CAI[_dayGanIndex + 1]
     }
 
     public var dayPositionCaiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[dayPositionCai]!
-        }
+        LunarUtil.POSITION_DESC[dayPositionCai]!
     }
 
     public var timePositionXi: String {
-        get {
-            LunarUtil.POSITION_XI[_timeGanIndex + 1]
-        }
+        LunarUtil.POSITION_XI[_timeGanIndex + 1]
     }
 
     public var timePositionXiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[timePositionXi]!
-        }
+        LunarUtil.POSITION_DESC[timePositionXi]!
     }
 
     public var timePositionYangGui: String {
-        get {
-            LunarUtil.POSITION_YANG_GUI[_timeGanIndex + 1]
-        }
+        LunarUtil.POSITION_YANG_GUI[_timeGanIndex + 1]
     }
 
     public var timePositionYangGuiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[timePositionYangGui]!
-        }
+        LunarUtil.POSITION_DESC[timePositionYangGui]!
     }
 
     public var timePositionYinGui: String {
-        get {
-            LunarUtil.POSITION_YIN_GUI[_timeGanIndex + 1]
-        }
+        LunarUtil.POSITION_YIN_GUI[_timeGanIndex + 1]
     }
 
     public var timePositionYinGuiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[timePositionYinGui]!
-        }
+        LunarUtil.POSITION_DESC[timePositionYinGui]!
     }
 
     public var timePositionFu: String {
-        get {
-            getTimePositionFu(sect: 2)
-        }
+        getTimePositionFu(sect: 2)
     }
 
     public var timePositionFuDesc: String {
-        get {
-            getTimePositionFuDesc(sect: 2)
-        }
+        getTimePositionFuDesc(sect: 2)
     }
 
     public func getTimePositionFu(sect: Int) -> String {
@@ -869,82 +677,58 @@ public class Lunar: NSObject {
     }
 
     public var timePositionCai: String {
-        get {
-            LunarUtil.POSITION_CAI[_timeGanIndex + 1]
-        }
+        LunarUtil.POSITION_CAI[_timeGanIndex + 1]
     }
 
     public var timePositionCaiDesc: String {
-        get {
-            LunarUtil.POSITION_DESC[timePositionCai]!
-        }
+        LunarUtil.POSITION_DESC[timePositionCai]!
     }
 
     public var zhiXing: String {
-        get {
-            var offset = _dayZhiIndex - _monthZhiIndex
-            if offset < 0 {
-                offset += 12
-            }
-            return LunarUtil.ZHI_XING[offset + 1]
+        var offset = _dayZhiIndex - _monthZhiIndex
+        if offset < 0 {
+            offset += 12
         }
+        return LunarUtil.ZHI_XING[offset + 1]
     }
 
     public var dayTianShen: String {
-        get {
-            LunarUtil.TIAN_SHEN[(_dayZhiIndex + LunarUtil.ZHI_TIAN_SHEN_OFFSET[monthZhi]!) % 12 + 1]
-        }
+        LunarUtil.TIAN_SHEN[(_dayZhiIndex + LunarUtil.ZHI_TIAN_SHEN_OFFSET[monthZhi]!) % 12 + 1]
     }
 
     public var dayTianShenType: String {
-        get {
-            LunarUtil.TIAN_SHEN_TYPE[dayTianShen]!
-        }
+        LunarUtil.TIAN_SHEN_TYPE[dayTianShen]!
     }
 
     public var dayTianShenLuck: String {
-        get {
-            LunarUtil.TIAN_SHEN_TYPE_LUCK[dayTianShenType]!
-        }
+        LunarUtil.TIAN_SHEN_TYPE_LUCK[dayTianShenType]!
     }
 
     public var timeTianShen: String {
-        get {
-            LunarUtil.TIAN_SHEN[(_timeZhiIndex + LunarUtil.ZHI_TIAN_SHEN_OFFSET[dayZhiExact]!) % 12 + 1]
-        }
+        LunarUtil.TIAN_SHEN[(_timeZhiIndex + LunarUtil.ZHI_TIAN_SHEN_OFFSET[dayZhiExact]!) % 12 + 1]
     }
 
     public var timeTianShenType: String {
-        get {
-            LunarUtil.TIAN_SHEN_TYPE[timeTianShen]!
-        }
+        LunarUtil.TIAN_SHEN_TYPE[timeTianShen]!
     }
 
     public var timeTianShenLuck: String {
-        get {
-            LunarUtil.TIAN_SHEN_TYPE_LUCK[timeTianShenType]!
-        }
+        LunarUtil.TIAN_SHEN_TYPE_LUCK[timeTianShenType]!
     }
 
     public var monthPositionTai: String {
-        get {
-            if _month < 0 {
-                return "";
-            }
-            return LunarUtil.POSITION_TAI_MONTH[_month - 1]
+        if _month < 0 {
+            return ""
         }
+        return LunarUtil.POSITION_TAI_MONTH[_month - 1]
     }
 
     public var dayPositionTai: String {
-        get {
-            LunarUtil.POSITION_TAI_DAY[LunarUtil.getJiaZiIndex(ganZhi: dayInGanZhi)]
-        }
+        LunarUtil.POSITION_TAI_DAY[LunarUtil.getJiaZiIndex(ganZhi: dayInGanZhi)]
     }
 
     public var dayYi: [String] {
-        get {
-            getDayYi(sect:1)
-        }
+        getDayYi(sect: 1)
     }
 
     public func getDayYi(sect: Int) -> [String] {
@@ -952,9 +736,7 @@ public class Lunar: NSObject {
     }
 
     public var dayJi: [String] {
-        get {
-            getDayJi(sect:1)
-        }
+        getDayJi(sect: 1)
     }
 
     public func getDayJi(sect: Int) -> [String] {
@@ -962,129 +744,95 @@ public class Lunar: NSObject {
     }
 
     public var dayJiShen: [String] {
-        get {
-            LunarUtil.getDayJiShen(lunarMonth: _month, dayGanZhi: dayInGanZhi)
-        }
+        LunarUtil.getDayJiShen(lunarMonth: _month, dayGanZhi: dayInGanZhi)
     }
 
     public var dayXiongSha: [String] {
-        get {
-            LunarUtil.getDayXiongSha(lunarMonth: _month, dayGanZhi: dayInGanZhi)
-        }
+        LunarUtil.getDayXiongSha(lunarMonth: _month, dayGanZhi: dayInGanZhi)
     }
 
     public var dayChong: String {
-        get {
-            LunarUtil.CHONG[_dayZhiIndex]
-        }
+        LunarUtil.CHONG[_dayZhiIndex]
     }
 
     public var daySha: String {
-        get {
-            LunarUtil.SHA[dayZhi]!
-        }
+        LunarUtil.SHA[dayZhi]!
     }
 
     public var dayChongShengXiao: String {
-        get {
-            for i in (0..<LunarUtil.ZHI.count) {
-                if LunarUtil.ZHI[i] == dayChong {
-                    return LunarUtil.SHENG_XIAO[i]
-                }
+        for i in 0 ..< LunarUtil.ZHI.count {
+            if LunarUtil.ZHI[i] == dayChong {
+                return LunarUtil.SHENG_XIAO[i]
             }
-            return ""
         }
+        return ""
     }
 
     public var dayChongGan: String {
-        get {
-            LunarUtil.CHONG_GAN[_dayGanIndex]
-        }
+        LunarUtil.CHONG_GAN[_dayGanIndex]
     }
 
     public var dayChongGanTie: String {
-        get {
-            LunarUtil.CHONG_GAN_TIE[_dayGanIndex]
-        }
+        LunarUtil.CHONG_GAN_TIE[_dayGanIndex]
     }
 
     public var dayChongDesc: String {
-        get {
-            "(\(dayChongGan)\(dayChong))\(dayChongShengXiao)"
-        }
+        "(\(dayChongGan)\(dayChong))\(dayChongShengXiao)"
     }
 
     public var timeChong: String {
-        get {
-            LunarUtil.CHONG[_timeZhiIndex]
-        }
+        LunarUtil.CHONG[_timeZhiIndex]
     }
 
     public var timeSha: String {
-        get {
-            LunarUtil.SHA[timeZhi]!
-        }
+        LunarUtil.SHA[timeZhi]!
     }
 
     public var timeChongShengXiao: String {
-        get {
-            for i in (0..<LunarUtil.ZHI.count) {
-                if LunarUtil.ZHI[i] == timeChong {
-                    return LunarUtil.SHENG_XIAO[i]
-                }
+        for i in 0 ..< LunarUtil.ZHI.count {
+            if LunarUtil.ZHI[i] == timeChong {
+                return LunarUtil.SHENG_XIAO[i]
             }
-            return ""
         }
+        return ""
     }
 
     public var timeChongGan: String {
-        get {
-            LunarUtil.CHONG_GAN[_timeGanIndex]
-        }
+        LunarUtil.CHONG_GAN[_timeGanIndex]
     }
 
     public var timeChongGanTie: String {
-        get {
-            LunarUtil.CHONG_GAN_TIE[_timeGanIndex]
-        }
+        LunarUtil.CHONG_GAN_TIE[_timeGanIndex]
     }
 
     public var yueXiang: String {
-        get {
-            LunarUtil.YUE_XIANG[_day]
-        }
+        LunarUtil.YUE_XIANG[_day]
     }
 
     public var timeChongDesc: String {
-        get {
-            "(\(timeChongGan)\(timeChong))\(timeChongShengXiao)"
-        }
+        "(\(timeChongGan)\(timeChong))\(timeChongShengXiao)"
     }
 
     public var jie: String {
-        get {
-            for i in stride(from: 0, to: Lunar.JIE_QI_IN_USE.count, by: 2) {
-                let key = Lunar.JIE_QI_IN_USE[i]
-                let d = _jieQi[key]!
-                if d.year == _solar.year && d.month == _solar.month && d.day == _solar.day {
-                    return Lunar.convertJieQi(name: key);
-                }
+        for i in stride(from: 0, to: Lunar.JIE_QI_IN_USE.count, by: 2) {
+            let key = Lunar.JIE_QI_IN_USE[i]
+            let d = _jieQi[key]!
+            if d.year == _solar.year && d.month == _solar.month && d.day == _solar.day {
+                return Lunar.convertJieQi(name: key)
             }
-            return ""
         }
+        return ""
     }
 
     public var qi: String {
-        get {
-            for i in stride(from: 1, to: Lunar.JIE_QI_IN_USE.count, by: 2) {
-                let key = Lunar.JIE_QI_IN_USE[i]
-                let d = _jieQi[key]!
-                if d.year == _solar.year && d.month == _solar.month && d.day == _solar.day {
-                    return Lunar.convertJieQi(name: key);
-                }
+        for i in stride(from: 1, to: Lunar.JIE_QI_IN_USE.count, by: 2) {
+            let key = Lunar.JIE_QI_IN_USE[i]
+            let d = _jieQi[key]!
+            if d.year == _solar.year && d.month == _solar.month && d.day == _solar.day {
+                return Lunar.convertJieQi(name: key)
             }
-            return ""
         }
+        return ""
     }
 
     private class func convertJieQi(name: String) -> String {
@@ -1108,255 +856,351 @@ public class Lunar: NSObject {
     }
 
     public var jieQiTable: [String: Solar] {
-        get {
-            _jieQi
-        }
+        _jieQi
     }
 
     public var jieQi: String {
-        get {
-            var name = ""
-            for jq in Lunar.JIE_QI_IN_USE {
-                let d = _jieQi[jq]!
-                if d.year == _solar.year && d.month == _solar.month && d.day == _solar.day {
-                    name = jq
-                    break
-                }
+        var name = ""
+        for jq in Lunar.JIE_QI_IN_USE {
+            let d = _jieQi[jq]!
+            if d.year == _solar.year && d.month == _solar.month && d.day == _solar.day {
+                name = jq
+                break
             }
-            return Lunar.convertJieQi(name: name)
         }
+        return Lunar.convertJieQi(name: name)
     }
 
     public var prevJie: JieQi {
-        get {
-            getPrevJie(wholeDay: false)!
-        }
+        getPrevJie(wholeDay: false)!
     }
 
     public var nextJie: JieQi {
-        get {
-            getNextJie(wholeDay: false)!
-        }
+        getNextJie(wholeDay: false)!
     }
 
     public var prevJieQi: JieQi {
-        get {
-            getPrevJieQi(wholeDay: false)!
-        }
+        getPrevJieQi(wholeDay: false)!
     }
 
     public var nextJieQi: JieQi {
-        get {
-            getNextJieQi(wholeDay: false)!
-        }
+        getNextJieQi(wholeDay: false)!
     }
 
     public var shuJiu: ShuJiu? {
-        get {
-            let current = Solar.fromYmdHms(year: solar.year, month: solar.month, day: solar.day)
-            var start = _jieQi["DONG_ZHI"]!
+        let current = Solar.fromYmdHms(year: solar.year, month: solar.month, day: solar.day)
+        var start = _jieQi["DONG_ZHI"]!
+        start = Solar.fromYmdHms(year: start.year, month: start.month, day: start.day)
+
+        if current.isBefore(solar: start) {
+            start = _jieQi["冬至"]!
             start = Solar.fromYmdHms(year: start.year, month: start.month, day: start.day)
-
-            if current.isBefore(solar: start) {
-                start = _jieQi["冬至"]!
-                start = Solar.fromYmdHms(year: start.year, month: start.month, day: start.day)
-            }
-
-            let end = start.next(days: 81)
-
-            if current.isBefore(solar: start) || !current.isBefore(solar: end) {
-                return nil
-            }
-
-            let days = current.subtract(solar: start)
-            return ShuJiu(name: LunarUtil.NUMBER[days / 9 + 1] + "九", index: days % 9 + 1)
         }
+
+        let end = start.next(days: 81)
+
+        if current.isBefore(solar: start) || !current.isBefore(solar: end) {
+            return nil
+        }
+
+        let days = current.subtract(solar: start)
+        return ShuJiu(name: LunarUtil.NUMBER[days / 9 + 1] + "九", index: days % 9 + 1)
     }
 
     public var fu: Fu? {
-        get {
-            let current = Solar.fromYmdHms(year: solar.year, month: solar.month, day: solar.day)
-            let xiaZhi = _jieQi["夏至"]!
-            let liQiu = _jieQi["立秋"]!
-            var start = Solar.fromYmdHms(year: xiaZhi.year, month: xiaZhi.month, day: xiaZhi.day)
-            // 第1个庚日
-            var add = 6 - xiaZhi.lunar.dayGanIndex
-            if add < 0 {
-                add += 10
-            }
-            // 第3个庚日，即初伏第1天
-            add += 20
-            start = start.next(days: add)
+        let current = Solar.fromYmdHms(year: solar.year, month: solar.month, day: solar.day)
+        let xiaZhi = _jieQi["夏至"]!
+        let liQiu = _jieQi["立秋"]!
+        var start = Solar.fromYmdHms(year: xiaZhi.year, month: xiaZhi.month, day: xiaZhi.day)
+        // 第1个庚日
+        var add = 6 - xiaZhi.lunar.dayGanIndex
+        if add < 0 {
+            add += 10
+        }
+        // 第3个庚日，即初伏第1天
+        add += 20
+        start = start.next(days: add)
 
-            // 初伏以前
-            if current.isBefore(solar: start) {
-                return nil
-            }
-
-            var days = current.subtract(solar: start)
-            if days < 10 {
-                return Fu(name: "初伏", index: days + 1)
-            }
-
-            // 第4个庚日，中伏第1天
-            start = start.next(days: 10)
-            days = current.subtract(solar: start)
-            if days < 10 {
-                return Fu(name: "中伏", index: days + 1)
-            }
-
-            // 第5个庚日，中伏第11天或末伏第1天
-            start = start.next(days: 10)
-            days = current.subtract(solar: start)
-            let liQiuSolar = Solar.fromYmdHms(year: liQiu.year, month: liQiu.month, day: liQiu.day)
-            // 末伏
-            if !liQiuSolar.isAfter(solar: start) {
-                if days < 10 {
-                    return Fu(name: "末伏", index: days + 1)
-                }
-            } else {
-                // 中伏
-                if days < 10 {
-                    return Fu(name: "中伏", index: days + 11)
-                }
-                // 末伏第1天
-                start = start.next(days: 10)
-                days = current.subtract(solar: start)
-                if days < 10 {
-                    return Fu(name: "末伏", index: days + 1)
-                }
-            }
+        // 初伏以前
+        if current.isBefore(solar: start) {
             return nil
         }
+
+        var days = current.subtract(solar: start)
+        if days < 10 {
+            return Fu(name: "初伏", index: days + 1)
+        }
+
+        // 第4个庚日，中伏第1天
+        start = start.next(days: 10)
+        days = current.subtract(solar: start)
+        if days < 10 {
+            return Fu(name: "中伏", index: days + 1)
+        }
+
+        // 第5个庚日，中伏第11天或末伏第1天
+        start = start.next(days: 10)
+        days = current.subtract(solar: start)
+        let liQiuSolar = Solar.fromYmdHms(year: liQiu.year, month: liQiu.month, day: liQiu.day)
+        // 末伏
+        if !liQiuSolar.isAfter(solar: start) {
+            if days < 10 {
+                return Fu(name: "末伏", index: days + 1)
+            }
+        } else {
+            // 中伏
+            if days < 10 {
+                return Fu(name: "中伏", index: days + 11)
+            }
+            // 末伏第1天
+            start = start.next(days: 10)
+            days = current.subtract(solar: start)
+            if days < 10 {
+                return Fu(name: "末伏", index: days + 1)
+            }
+        }
+        return nil
     }
 
     public var liuYao: String {
-        get {
-            LunarUtil.LIU_YAO[(abs(month) - 1 + day - 1) % 6]
-        }
+        LunarUtil.LIU_YAO[(abs(month) - 1 + day - 1) % 6]
     }
 
     public var wuHou: String {
-        get {
-            let jieQi = getPrevJieQi(wholeDay: true)!
-            var offset = 0
-            for i in (0..<Lunar.JIE_QI.count) {
-                if jieQi.name == Lunar.JIE_QI[i] {
-                    offset = i
-                    break
-                }
+        let jieQi = getPrevJieQi(wholeDay: true)!
+        var offset = 0
+        for i in 0 ..< Lunar.JIE_QI.count {
+            if jieQi.name == Lunar.JIE_QI[i] {
+                offset = i
+                break
             }
-            var index = solar.subtract(solar: jieQi.solar) / 5
-            if index > 2 {
-                index = 2
-            }
-            return LunarUtil.WU_HOU[(offset * 3 + index) % LunarUtil.WU_HOU.count]
         }
+        var index = solar.subtract(solar: jieQi.solar) / 5
+        if index > 2 {
+            index = 2
+        }
+        return LunarUtil.WU_HOU[(offset * 3 + index) % LunarUtil.WU_HOU.count]
     }
 
     public var hou: String {
-        get {
-            let jieQi = getPrevJieQi(wholeDay: true)!
-            let max = LunarUtil.HOU.count - 1
-            var offset = solar.subtract(solar: jieQi.solar) / 5
-            if offset > max {
-                offset = max
-            }
-            return "\(jieQi.name) \(LunarUtil.HOU[offset])"
+        let jieQi = getPrevJieQi(wholeDay: true)!
+        let max = LunarUtil.HOU.count - 1
+        var offset = solar.subtract(solar: jieQi.solar) / 5
+        if offset > max {
+            offset = max
         }
+        return "\(jieQi.name) \(LunarUtil.HOU[offset])"
     }
 
     public var dayLu: String {
-        get {
-            let gan = LunarUtil.LU[dayGan]!
-            let zhi = LunarUtil.LU[dayZhi]
-            var lu = "\(gan)命互禄"
-            if nil != zhi {
-                lu += " \(zhi!)命进禄"
-            }
-            return lu
+        let gan = LunarUtil.LU[dayGan]!
+        let zhi = LunarUtil.LU[dayZhi]
+        var lu = "\(gan)命互禄"
+        if nil != zhi {
+            lu += " \(zhi!)命进禄"
         }
+        return lu
     }
 
     public var festivals: [String] {
-        get {
-            var l = [String]()
-            let f = LunarUtil.FESTIVAL["\(_month)-\(_day)"]
-            if nil != f {
-                l.append(f!)
-            }
-            if abs(_month) == 12 && _day >= 29 && _year != next(days: 1).year {
-                l.append("除夕")
-            }
-            return l
+        var l = [String]()
+        let f = LunarUtil.FESTIVAL["\(_month)-\(_day)"]
+        if nil != f {
+            l.append(f!)
         }
+        if abs(_month) == 12 && _day >= 29 && _year != next(days: 1).year {
+            l.append("除夕")
+        }
+        return l
     }
 
     public var otherFestivals: [String] {
-        get {
-            var l = [String]()
-            let f = LunarUtil.OTHER_FESTIVAL["\(_month)-\(_day)"]
-            if nil != f {
-                for i in f! {
-                    l.append(i)
-                }
+        var l = [String]()
+        let f = LunarUtil.OTHER_FESTIVAL["\(_month)-\(_day)"]
+        if nil != f {
+            for i in f! {
+                l.append(i)
             }
-            let solarYmd = _solar.ymd
-            var jq = _jieQi["清明"]!
-            if solarYmd == jq.next(days: -1).ymd {
-                l.append("寒食节")
-            }
-
-            jq = _jieQi["立春"]!
-            var offset = 4 - jq.lunar.dayGanIndex
-            if offset < 0 {
-                offset += 10
-            }
-            if solarYmd == jq.next(days: offset+40).ymd {
-                l.append("春社")
-            }
-
-            jq = _jieQi["立秋"]!
-            offset = 4 - jq.lunar.dayGanIndex
-            if offset < 0 {
-                offset += 10
-            }
-            if solarYmd == jq.next(days: offset+40).ymd {
-                l.append("秋社")
-            }
-            return l
         }
+        let solarYmd = _solar.ymd
+        var jq = _jieQi["清明"]!
+        if solarYmd == jq.next(days: -1).ymd {
+            l.append("寒食节")
+        }
+
+        jq = _jieQi["立春"]!
+        var offset = 4 - jq.lunar.dayGanIndex
+        if offset < 0 {
+            offset += 10
+        }
+        if solarYmd == jq.next(days: offset + 40).ymd {
+            l.append("春社")
+        }
+
+        jq = _jieQi["立秋"]!
+        offset = 4 - jq.lunar.dayGanIndex
+        if offset < 0 {
+            offset += 10
+        }
+        if solarYmd == jq.next(days: offset + 40).ymd {
+            l.append("秋社")
+        }
+        return l
     }
 
-    public override var description: String {
-        get {
-            "\(yearInChinese)年\(monthInChinese)月\(dayInChinese)"
-        }
+    override public var description: String {
+        "\(yearInChinese)年\(monthInChinese)月\(dayInChinese)"
     }
 
     public var fullString: String {
-        get {
-            var s = "\(description) \(yearInGanZhi)(\(yearShengXiao))年\(monthInGanZhi)(\(monthShengXiao))月\(dayInGanZhi)(\(dayShengXiao))日\(timeInGanZhi)(\(timeShengXiao))时"
-            s += "纳音[\(yearNaYin) \(monthNaYin) \(dayNaYin) \(timeNaYin)] "
-            s += "星期\(weekInChinese)"
-            for i in festivals {
-                s += " (\(i))"
-            }
-            for i in otherFestivals {
-                s += " (\(i))"
-            }
-            if !jieQi.isEmpty {
-                s += " [\(jieQi)]"
-            }
-            s += " \(gong)方\(shou) 星宿[\(xiu)\(zheng)\(animal)](\(xiuLuck)) 彭祖百忌[\(pengZuGan) \(pengZuZhi)]"
-            s += " 喜神方位[\(dayPositionXi)](\(dayPositionXiDesc))"
-            s += " 阳贵神方位[\(dayPositionYangGui)](\(dayPositionYangGuiDesc))"
-            s += " 阴贵神方位[\(dayPositionYinGui)](\(dayPositionYinGuiDesc))"
-            s += " 福神方位[\(dayPositionFu)](\(dayPositionFuDesc))"
-            s += " 财神方位[\(dayPositionCai)](\(dayPositionCaiDesc))"
-            s += " 冲[\(dayChongDesc)] 煞[\(daySha)]"
-            return s
+        var s = "\(description) \(yearInGanZhi)(\(yearShengXiao))年\(monthInGanZhi)(\(monthShengXiao))月\(dayInGanZhi)(\(dayShengXiao))日\(timeInGanZhi)(\(timeShengXiao))时"
+        s += "纳音[\(yearNaYin) \(monthNaYin) \(dayNaYin) \(timeNaYin)] "
+        s += "星期\(weekInChinese)"
+        for i in festivals {
+            s += " (\(i))"
         }
+        for i in otherFestivals {
+            s += " (\(i))"
+        }
+        if !jieQi.isEmpty {
+            s += " [\(jieQi)]"
+        }
+        s += " \(gong)方\(shou) 星宿[\(xiu)\(zheng)\(animal)](\(xiuLuck)) 彭祖百忌[\(pengZuGan) \(pengZuZhi)]"
+        s += " 喜神方位[\(dayPositionXi)](\(dayPositionXiDesc))"
+        s += " 阳贵神方位[\(dayPositionYangGui)](\(dayPositionYangGuiDesc))"
+        s += " 阴贵神方位[\(dayPositionYinGui)](\(dayPositionYinGuiDesc))"
+        s += " 福神方位[\(dayPositionFu)](\(dayPositionFuDesc))"
+        s += " 财神方位[\(dayPositionCai)](\(dayPositionCaiDesc))"
+        s += " 冲[\(dayChongDesc)] 煞[\(daySha)]"
+        return s
+    }
+
+    public func getYearNineStarByGanZhi(gz: String) -> NineStar {
+        let indexExact = LunarUtil.getJiaZiIndex(ganZhi: gz) + 1
+        let index = LunarUtil.getJiaZiIndex(ganZhi: yearInGanZhi) + 1
+        var yearOffset = indexExact - index
+        if yearOffset > 1 {
+            yearOffset -= 60
+        } else if yearOffset < -1 {
+            yearOffset += 60
+        }
+        let yuan = ((year + yearOffset + 2696) / 60) % 3
+        var offset = (62 + yuan * 3 - indexExact) % 9
+        if 0 == offset {
+            offset = 9
+        }
+        return NineStar.fromIndex(index: offset - 1)
+    }
+
+    public var yearNineStar: NineStar {
+        getYearNineStar(sect: 2)
+    }
+
+    public func getYearNineStar(sect: Int) -> NineStar {
+        var gz: String
+        switch sect {
+        case 1:
+            gz = yearInGanZhi
+            break
+        case 3:
+            gz = yearInGanZhiExact
+            break
+        default:
+            gz = yearInGanZhiByLiChun
+        }
+        return getYearNineStarByGanZhi(gz: gz)
+    }
+
+    public func getMonthNineStar(yearZhiIndex: Int, monthZhiIndex: Int) -> NineStar {
+        let index = yearZhiIndex % 3
+        var n = 27 - index * 3
+        if monthZhiIndex < LunarUtil.BASE_MONTH_ZHI_INDEX {
+            n -= 3
+        }
+        return NineStar(index: (n - monthZhiIndex) % 9)
+    }
+
+    public var monthNineStar: NineStar {
+        getMonthNineStar(sect: 2)
+    }
+
+    public func getMonthNineStar(sect: Int) -> NineStar {
+        var yearIndex: Int
+        var monthIndex: Int
+        switch sect {
+        case 1:
+            yearIndex = _yearZhiIndex
+            monthIndex = _monthZhiIndex
+            break
+        case 3:
+            yearIndex = _yearZhiIndexExact
+            monthIndex = _monthZhiIndexExact
+            break
+        default:
+            yearIndex = _yearZhiIndexByLiChun
+            monthIndex = _monthZhiIndex
+        }
+        return getMonthNineStar(yearZhiIndex: yearIndex, monthZhiIndex: monthIndex)
+    }
+
+    public var dayNineStar: NineStar {
+        let solarYmd = solar.ymd
+        let dongZhi = jieQiTable["冬至"]!
+        let dongZhi2 = jieQiTable["DONG_ZHI"]!
+        let xiaZhi = jieQiTable["夏至"]!
+        let dongZhiIndex = LunarUtil.getJiaZiIndex(ganZhi: dongZhi.lunar.dayInGanZhi)
+        let dongZhiIndex2 = LunarUtil.getJiaZiIndex(ganZhi: dongZhi2.lunar.dayInGanZhi)
+        let xiaZhiIndex = LunarUtil.getJiaZiIndex(ganZhi: xiaZhi.lunar.dayInGanZhi)
+        var solarShunBai: Solar
+        var solarShunBai2: Solar
+        var solarNiZi: Solar
+        if dongZhiIndex > 29 {
+            solarShunBai = dongZhi.next(days: 60 - dongZhiIndex)
+        } else {
+            solarShunBai = dongZhi.next(days: -dongZhiIndex)
+        }
+        let solarShunBaiYmd = solarShunBai.ymd
+        if dongZhiIndex2 > 29 {
+            solarShunBai2 = dongZhi2.next(days: 60 - dongZhiIndex2)
+        } else {
+            solarShunBai2 = dongZhi2.next(days: -dongZhiIndex2)
+        }
+        let solarShunBaiYmd2 = solarShunBai2.ymd
+        if xiaZhiIndex > 29 {
+            solarNiZi = xiaZhi.next(days: 60 - xiaZhiIndex)
+        } else {
+            solarNiZi = xiaZhi.next(days: -xiaZhiIndex)
+        }
+        let solarNiZiYmd = solarNiZi.ymd
+        var offset = 0
+        if solarYmd >= solarShunBaiYmd && solarYmd < solarNiZiYmd {
+            offset = solar.subtract(solar: solarShunBai) % 9
+        } else if solarYmd >= solarNiZiYmd && solarYmd < solarShunBaiYmd2 {
+            offset = 8 - (solar.subtract(solar: solarNiZi) % 9)
+        } else if solarYmd >= solarShunBaiYmd2 {
+            offset = solar.subtract(solar: solarShunBai2) % 9
+        } else if solarYmd < solarShunBaiYmd {
+            offset = (8 + solarShunBai.subtract(solar: solar)) % 9
+        }
+        return NineStar(index: offset)
+    }
+
+    public var timeNineStar: NineStar {
+        let solarYmd = solar.ymd
+        var asc = false
+        if solarYmd >= jieQiTable["冬至"]!.ymd && solarYmd < jieQiTable["夏至"]!.ymd {
+            asc = true
+        } else if solarYmd >= jieQiTable["DONG_ZHI"]!.ymd {
+            asc = true
+        }
+        var start = asc ? 6 : 2
+        if "子午卯酉".contains(dayZhi) {
+            start = asc ? 0 : 8
+        } else if "辰戌丑未".contains(dayZhi) {
+            start = asc ? 3 : 5
+        }
+        let index = asc ? start + timeZhiIndex : start + 9 - timeZhiIndex
+        return NineStar(index: index % 9)
     }
 
     public func next(days: Int) -> Lunar {
@@ -1370,8 +1214,8 @@ public class Lunar: NSObject {
     public func getNextJie(wholeDay: Bool = false) -> JieQi? {
         let l = Lunar.JIE_QI_IN_USE.count / 2
         var conditions = [String]()
-        for i in (0..<l) {
-            conditions.append(Lunar.JIE_QI_IN_USE[i*2])
+        for i in 0 ..< l {
+            conditions.append(Lunar.JIE_QI_IN_USE[i * 2])
         }
         return getNearJieQi(forward: true, conditions: conditions, wholeDay: wholeDay)
     }
@@ -1383,8 +1227,8 @@ public class Lunar: NSObject {
     public func getPrevJie(wholeDay: Bool = false) -> JieQi? {
         let l = Lunar.JIE_QI_IN_USE.count / 2
         var conditions = [String]()
-        for i in (0..<l) {
-            conditions.append(Lunar.JIE_QI_IN_USE[i*2])
+        for i in 0 ..< l {
+            conditions.append(Lunar.JIE_QI_IN_USE[i * 2])
         }
         return getNearJieQi(forward: false, conditions: conditions, wholeDay: wholeDay)
     }
@@ -1467,137 +1311,94 @@ public class Lunar: NSObject {
     }
 
     public var yearXun: String {
-        get {
-            LunarUtil.getXun(ganZhi: yearInGanZhi)
-        }
+        LunarUtil.getXun(ganZhi: yearInGanZhi)
     }
 
     public var yearXunByLiChun: String {
-        get {
-            LunarUtil.getXun(ganZhi: yearInGanZhiByLiChun)
-        }
+        LunarUtil.getXun(ganZhi: yearInGanZhiByLiChun)
     }
 
     public var yearXunExact: String {
-        get {
-            LunarUtil.getXun(ganZhi: yearInGanZhiExact)
-        }
+        LunarUtil.getXun(ganZhi: yearInGanZhiExact)
     }
 
     public var yearXunKong: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: yearInGanZhi)
-        }
+        LunarUtil.getXunKong(ganZhi: yearInGanZhi)
     }
 
     public var yearXunKongByLiChun: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: yearInGanZhiByLiChun)
-        }
+        LunarUtil.getXunKong(ganZhi: yearInGanZhiByLiChun)
     }
 
     public var yearXunKongExact: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: yearInGanZhiExact)
-        }
+        LunarUtil.getXunKong(ganZhi: yearInGanZhiExact)
     }
 
     public var monthXun: String {
-        get {
-            LunarUtil.getXun(ganZhi: monthInGanZhi)
-        }
+        LunarUtil.getXun(ganZhi: monthInGanZhi)
     }
 
     public var monthXunExact: String {
-        get {
-            LunarUtil.getXun(ganZhi: monthInGanZhiExact)
-        }
+        LunarUtil.getXun(ganZhi: monthInGanZhiExact)
     }
 
     public var monthXunKong: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: monthInGanZhi)
-        }
+        LunarUtil.getXunKong(ganZhi: monthInGanZhi)
     }
 
     public var monthXunKongExact: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: monthInGanZhiExact)
-        }
+        LunarUtil.getXunKong(ganZhi: monthInGanZhiExact)
     }
 
     public var dayXun: String {
-        get {
-            LunarUtil.getXun(ganZhi: dayInGanZhi)
-        }
+        LunarUtil.getXun(ganZhi: dayInGanZhi)
     }
 
     public var dayXunExact: String {
-        get {
-            LunarUtil.getXun(ganZhi: dayInGanZhiExact)
-        }
+        LunarUtil.getXun(ganZhi: dayInGanZhiExact)
     }
 
     public var dayXunExact2: String {
-        get {
-            LunarUtil.getXun(ganZhi: dayInGanZhiExact2)
-        }
+        LunarUtil.getXun(ganZhi: dayInGanZhiExact2)
     }
 
     public var dayXunKong: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: dayInGanZhi)
-        }
+        LunarUtil.getXunKong(ganZhi: dayInGanZhi)
     }
 
     public var dayXunKongExact: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: dayInGanZhiExact)
-        }
+        LunarUtil.getXunKong(ganZhi: dayInGanZhiExact)
     }
 
     public var dayXunKongExact2: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: dayInGanZhiExact2)
-        }
+        LunarUtil.getXunKong(ganZhi: dayInGanZhiExact2)
     }
 
     public var timeXun: String {
-        get {
-            LunarUtil.getXun(ganZhi: timeInGanZhi)
-        }
+        LunarUtil.getXun(ganZhi: timeInGanZhi)
     }
 
     public var timeXunKong: String {
-        get {
-            LunarUtil.getXunKong(ganZhi: timeInGanZhi)
-        }
+        LunarUtil.getXunKong(ganZhi: timeInGanZhi)
     }
 
     public var eightChar: EightChar {
-        get {
-            if nil == _eightChar {
-                _eightChar = EightChar(lunar: self)
-            }
-            return _eightChar!
+        if nil == _eightChar {
+            _eightChar = EightChar(lunar: self)
         }
+        return _eightChar!
     }
 
     public var time: LunarTime {
-        get {
-            LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: _hour, minute: _minute, second: _second)
-        }
+        LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: _hour, minute: _minute, second: _second)
     }
 
     public var times: [LunarTime] {
-        get {
-            var l = [LunarTime]()
-            l.append(LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: 0, minute: 0, second: 0))
-            for i in (0..<12) {
-                l.append(LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: (i + 1) * 2 - 1, minute: 0, second: 0))
-            }
-            return l
+        var l = [LunarTime]()
+        l.append(LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: 0, minute: 0, second: 0))
+        for i in 0 ..< 12 {
+            l.append(LunarTime.fromYmdHms(lunarYear: _year, lunarMonth: _month, lunarDay: _day, hour: (i + 1) * 2 - 1, minute: 0, second: 0))
         }
+        return l
     }
-
 }

@@ -16,6 +16,7 @@ public class LunarYear: NSObject {
         }
         return leap
     }()
+
     private static var CACHE: [Int: LunarYear] = [:]
 
     private var _year: Int
@@ -25,75 +26,55 @@ public class LunarYear: NSObject {
     private var _jieQiJulianDays: [Double]
 
     public var year: Int {
-        get {
-            _year
-        }
+        _year
     }
 
     public var ganIndex: Int {
-        get {
-            _ganIndex
-        }
+        _ganIndex
     }
 
     public var zhiIndex: Int {
-        get {
-            _zhiIndex
-        }
+        _zhiIndex
     }
 
     public var months: [LunarMonth] {
-        get {
-            _months
-        }
+        _months
     }
 
     public var monthsInYear: [LunarMonth] {
-        get {
-            var l: [LunarMonth] = []
-            for m in _months {
-                if m.year == _year {
-                    l.append(m)
-                }
+        var l: [LunarMonth] = []
+        for m in _months {
+            if m.year == _year {
+                l.append(m)
             }
-            return l
         }
+        return l
     }
 
     public var dayCount: Int {
-        get {
-            var n = 0
-            for m in _months {
-                if m.year == _year {
-                    n += m.dayCount
-                }
+        var n = 0
+        for m in _months {
+            if m.year == _year {
+                n += m.dayCount
             }
-            return n
         }
+        return n
     }
 
     public var jieQiJulianDays: [Double] {
-        get {
-            _jieQiJulianDays
-        }
+        _jieQiJulianDays
     }
 
     public var gan: String {
-        get {
-            LunarUtil.GAN[_ganIndex + 1]
-        }
+        LunarUtil.GAN[_ganIndex + 1]
     }
 
     public var zhi: String {
-        get {
-            LunarUtil.ZHI[_zhiIndex + 1]
-        }
+        LunarUtil.ZHI[_zhiIndex + 1]
     }
 
     public var ganZhi: String {
-        get {
-            "\(gan)\(zhi)"
-        }
+        "\(gan)\(zhi)"
     }
 
     public init(lunarYear: Int) {
@@ -122,9 +103,9 @@ public class LunarYear: NSObject {
 
         // 从上年的大雪到下年的立春
         _jieQiJulianDays = [Double]()
-        for i in 0..<Lunar.JIE_QI_IN_USE.count {
+        for i in 0 ..< Lunar.JIE_QI_IN_USE.count {
             // 精确的节气
-            var t = 36525 * ShouXingUtil.saLonT(w: (Double(year)+Double(17+i)*15/360)*ShouXingUtil.PI_2)
+            var t = 36525 * ShouXingUtil.saLonT(w: (Double(year) + Double(17 + i) * 15 / 360) * ShouXingUtil.PI_2)
             t += ShouXingUtil.ONE_THIRD - ShouXingUtil.dtT(t: t)
             _jieQiJulianDays.append(t + Solar.J2000)
             // 按中午12点算的节气
@@ -142,12 +123,12 @@ public class LunarYear: NSObject {
             }
         }
         // 递推每月初一
-        for i in (0..<16) {
-            hs.append(ShouXingUtil.calcShuo(pjd: w + 29.5306*Double(i)))
+        for i in 0 ..< 16 {
+            hs.append(ShouXingUtil.calcShuo(pjd: w + 29.5306 * Double(i)))
         }
         // 每月天数
-        for i in (0..<15) {
-            dayCounts.append(Int(hs[i+1] - hs[i]))
+        for i in 0 ..< 15 {
+            dayCounts.append(Int(hs[i + 1] - hs[i]))
         }
 
         let prevYear = currentYear - 1
@@ -155,11 +136,9 @@ public class LunarYear: NSObject {
         var leapIndex = -1
 
         var leap = LunarYear.LEAP[currentYear]
-        if nil == leap
-        {
+        if nil == leap {
             leap = LunarYear.LEAP[prevYear]
-            if nil == leap
-            {
+            if nil == leap {
                 if hs[13] <= jq[24] {
                     var i = 1
                     while hs[i + 1] > jq[2 * i] && i < 13 {
@@ -180,7 +159,7 @@ public class LunarYear: NSObject {
         var y = prevYear
         var m = 11
         var index = m
-        for i in (0..<15) {
+        for i in 0 ..< 15 {
             var cm = m
             if y == leapYear && i == leapIndex {
                 cm = -cm
@@ -216,16 +195,21 @@ public class LunarYear: NSObject {
         return nil
     }
 
-    public override var description: String {
-        get {
-            "\(_year)"
+    public var nineStar: NineStar {
+        let index = LunarUtil.getJiaZiIndex(ganZhi: ganZhi) + 1
+        let yuan = ((_year + 2696) / 60) % 3
+        var offset = (62 + yuan * 3 - index) % 9
+        if 0 == offset {
+            offset = 9
         }
+        return NineStar(index: offset - 1)
+    }
+
+    override public var description: String {
+        "\(_year)"
     }
 
     public var fullString: String {
-        get {
-            "\(year)年"
-        }
+        "\(year)年"
     }
-
 }
