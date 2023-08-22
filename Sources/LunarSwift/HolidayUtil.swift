@@ -1,5 +1,6 @@
 import Foundation
 
+@objcMembers
 public class HolidayUtil {
 
     private static let SIZE: Int = 18
@@ -101,7 +102,7 @@ public class HolidayUtil {
     public class func getHoliday(ymd: String) -> Holiday? {
         var s = ymd
         if s.contains("-") {
-            s.replaceSubrange(s.range(of: "-")!, with: "")
+            s = s.replacingOccurrences(of: "-", with: "")
         }
         let l = findHolidaysForward(key: s)
         return l.isEmpty ? nil : l[0]
@@ -118,7 +119,7 @@ public class HolidayUtil {
     public class func getHolidays(ymd: String) -> [Holiday] {
         var s = ymd
         if s.contains("-") {
-            s.replaceSubrange(s.range(of: "-")!, with: "")
+            s = s.replacingOccurrences(of: "-", with: "")
         }
         return findHolidaysForward(key: s)
     }
@@ -130,7 +131,7 @@ public class HolidayUtil {
     public class func getHolidaysByTarget(ymd: String) -> [Holiday] {
         var s = ymd
         if s.contains("-") {
-            s.replaceSubrange(s.range(of: "-")!, with: "")
+            s = s.replacingOccurrences(of: "-", with: "")
         }
         return findHolidaysBackward(key: s)
     }
@@ -165,10 +166,10 @@ public class HolidayUtil {
                     let name = Character(UnicodeScalar(nameIndex + ZERO)!)
                     let work = holiday!.work ? "1" : "0"
                     var target = holiday!.target
-                    target.replaceSubrange(target.range(of: "-")!, with: "")
+                    target = target.replacingOccurrences(of: "-", with: "")
                     let old = "\(day)\(name)\(work)\(target)"
                     if DATA_IN_USE.contains(old) {
-                        DATA_IN_USE.replaceSubrange(DATA_IN_USE.range(of: old)!, with: remove ? "" : segment)
+                        DATA_IN_USE = DATA_IN_USE.replacingOccurrences(of: old, with: remove ? "" : segment)
                     }
                 }
             }

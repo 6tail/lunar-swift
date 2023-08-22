@@ -107,7 +107,7 @@ public class Solar: NSObject {
         d -= Int(365.25 * Double(year))
         var month = Int(Double(d) / 30.601)
         d -= Int(30.601 * Double(month))
-        let day = d
+        var day = d
         if month > 13
         {
             month -= 13
@@ -126,7 +126,7 @@ public class Solar: NSObject {
         var minute = Int(f)
 
         f -= Double(minute)
-        f *= 60;
+        f *= 60
         var second = Int(round(f))
 
         if second > 59
@@ -138,6 +138,10 @@ public class Solar: NSObject {
         {
             minute -= 60
             hour += 1
+        }
+        if hour > 23 {
+            hour -= 24
+            day += 1
         }
         return Solar(year: year, month: month, day: day, hour: hour, minute: minute, second: second)
     }
@@ -467,6 +471,51 @@ public class Solar: NSObject {
         }
         let o = next(days: days)
         return Solar.fromYmdHms(year: o.year, month: o.month, day: o.day, hour: hour, minute: o.minute, second: o.second)
+    }
+    
+    public func getSalaryRate() -> Int {
+        // 元旦节
+        if _month == 1 && _day == 1 {
+            return 3
+        }
+        // 劳动节
+        if _month == 5 && _day == 1 {
+            return 3
+        }
+        // 国庆
+        if _month == 10 && _day >= 1 && _day <= 3 {
+            return 3
+        }
+        // 春节
+        if lunar.month == 1 && lunar.day >= 1 && lunar.day <= 3 {
+            return 3
+        }
+        // 端午
+        if lunar.month == 5 && lunar.day == 5 {
+            return 3
+        }
+        // 中秋
+        if lunar.month == 8 && lunar.day == 15 {
+            return 3
+        }
+        // 清明
+        if "清明" == lunar.jieQi {
+            return 3
+        }
+        let holiday = HolidayUtil.getHolidayByYmd(year: _year, month: _month, day: _day)
+        if holiday != nil {
+            // 法定假日非上班
+            if !holiday!.work {
+                return 2
+            }
+        } else {
+            // 周末
+            if week == 6 || week == 0 {
+                return 2
+            }
+        }
+        // 工作日
+        return 1
     }
 
     public var ymd: String {

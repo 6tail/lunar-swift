@@ -27,5 +27,19 @@ final class EightCharTests: XCTestCase {
         XCTAssertEqual(eightChar.day, "辛丑")
         XCTAssertEqual(eightChar.time, "戊子")
     }
+    
+    func test3() throws {
+        let solar = Solar.fromYmdHms(year: 2023, month: 1, day: 1, hour: 13, minute: 30)
+        let lunar = solar.lunar
+        let yun = lunar.eightChar.getYun(gender: 1, sect: 2)
+        let startYear = yun.startYear
+        let startMonth = yun.startMonth
+        let startDay = yun.startDay
+        let startTime = yun.startHour
+        XCTAssertEqual("\(startYear)\(startMonth)\(startDay)\(startTime)", "151720")
+        
+        let timeShiShenZhi = lunar.eightChar.timeShiShenZhi.joined(separator: " ")
+        XCTAssertEqual(timeShiShenZhi, "比肩 偏印 七杀")
+    }
 
 }

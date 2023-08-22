@@ -1,5 +1,6 @@
 import Foundation
 
+@objcMembers
 public class SolarUtil {
     public static var WEEK: [String] = ["日", "一", "二", "三", "四", "五", "六"]
     public static var DAYS_OF_MONTH: [Int] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -173,7 +174,10 @@ public class SolarUtil {
     ]
 
     public class func isLeapYear(year: Int) -> Bool {
-        (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+        if year < 1600 {
+            return year % 4 == 0
+        }
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 
     public class func getDaysOfYear(year: Int) -> Int {

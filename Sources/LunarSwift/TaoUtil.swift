@@ -1,5 +1,6 @@
 import Foundation
 
+@objcMembers
 public class TaoUtil {
 
     public static var SAN_HUI: [String] = ["1-7", "7-7", "10-15"]

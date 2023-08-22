@@ -1,5 +1,6 @@
 import Foundation
 
+@objcMembers
 public class LunarUtil {
 
     public static var BASE_MONTH_ZHI_INDEX: Int = 2
