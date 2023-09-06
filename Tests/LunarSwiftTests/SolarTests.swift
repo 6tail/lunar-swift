@@ -51,5 +51,21 @@ final class SolarTests: XCTestCase {
     func test12() throws {
         XCTAssertEqual(Solar.fromYmdHms(year: 1991, month: 5, day: 12).lunar.dayInGanZhi, "壬午")
     }
+    
+    func test13() throws {
+        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 8, day: 31).nextMonth(months: 1).description, "2023-09-30")
+    }
+    
+    func test14() throws {
+        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 8, day: 31).nextMonth(months: 2).description, "2023-10-31")
+    }
+    
+    func test15() throws {
+        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 8, day: 31).nextMonth(months: 6).description, "2024-02-29")
+    }
+    
+    func test16() throws {
+        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 8, day: 31).nextYear(years: 2).description, "2025-08-31")
+    }
 
 }

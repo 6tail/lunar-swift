@@ -346,17 +346,15 @@ public class Solar: NSObject {
     public func nextYear(years: Int) -> Solar {
         let y = _year + years
         var d = _day
-        // 2月处理
-        if 2 == _month {
+        if 1582 == y && 10 == _month {
+            if d > 4 && d < 15 {
+                d += 10
+            }
+        } else if 2 == _month {
             if d > 28 {
                 if !SolarUtil.isLeapYear(year: y) {
                     d = 28
                 }
-            }
-        }
-        if 1582 == y && 10 == _month {
-            if d > 4 && d < 15 {
-                d += 10
             }
         }
         return Solar.fromYmdHms(year: y, month: _month, day: d, hour: _hour, minute: _minute, second: _second)
@@ -367,17 +365,14 @@ public class Solar: NSObject {
         let y = month.year
         let m = month.month
         var d = _day
-        // 2月处理
-        if 2 == m {
-            if d > 28 {
-                if !SolarUtil.isLeapYear(year: y) {
-                    d = 28
-                }
-            }
-        }
         if 1582 == y && 10 == m {
             if d > 4 && d < 15 {
                 d += 10
+            }
+        } else {
+            let maxDay = SolarUtil.getDaysOfMonth(year: y, month: m)
+            if d > maxDay {
+                d = maxDay
             }
         }
         return Solar.fromYmdHms(year: y, month: m, day: d, hour: _hour, minute: _minute, second: _second)
