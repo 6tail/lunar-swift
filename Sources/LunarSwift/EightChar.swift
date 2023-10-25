@@ -282,7 +282,7 @@ public class EightChar: NSObject {
         let hideGan = LunarUtil.ZHI_HIDE_GAN[zhi]!
         var l = [String]()
         for gan in hideGan {
-            l.append(LunarUtil.SHI_SHEN_ZHI[dayGan + zhi + gan]!)
+            l.append(LunarUtil.SHI_SHEN_ZHI[dayGan + gan]!)
         }
         return l
     }
