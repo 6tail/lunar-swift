@@ -212,7 +212,7 @@ public class Solar: NSObject {
 
     public var week: Int {
         get {
-            SolarUtil.getWeek(year: _year, month: _month, day: _day)
+            (Int(julianDay + 0.5) + 7000001) % 7
         }
     }
 

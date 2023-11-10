@@ -867,7 +867,7 @@ public class LunarUtil {
     public class func getDayJiShen(lunarMonth: Int, dayGanZhi: String) -> [String] {
         var l = [String]()
         let day = hex(n: getJiaZiIndex(ganZhi: dayGanZhi))
-        let month = String(abs(lunarMonth), radix: 16)
+        let month = String(abs(lunarMonth), radix: 16).uppercased()
         var right = DAY_SHEN_SHA
         let index = right.range(of: "\(month)\(day)=")
         if nil != index {
@@ -894,7 +894,7 @@ public class LunarUtil {
     public class func getDayXiongSha(lunarMonth: Int, dayGanZhi: String) -> [String] {
         var l = [String]()
         let day = hex(n: getJiaZiIndex(ganZhi: dayGanZhi))
-        let month = String(abs(lunarMonth), radix: 16)
+        let month = String(abs(lunarMonth), radix: 16).uppercased()
         var right = DAY_SHEN_SHA
         let index = right.range(of: "\(month)\(day)=")
         if nil != index {
