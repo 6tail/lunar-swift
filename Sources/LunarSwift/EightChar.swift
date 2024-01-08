@@ -282,20 +282,20 @@ public class EightChar: NSObject {
         let hideGan = LunarUtil.ZHI_HIDE_GAN[zhi]!
         var l = [String]()
         for gan in hideGan {
-            l.append(LunarUtil.SHI_SHEN_ZHI[dayGan + gan]!)
+            l.append(LunarUtil.SHI_SHEN[dayGan + gan]!)
         }
         return l
     }
 
     public var yearShiShenGan: String {
         get {
-            LunarUtil.SHI_SHEN_GAN[dayGan + yearGan]!
+            LunarUtil.SHI_SHEN[dayGan + yearGan]!
         }
     }
 
     public var monthShiShenGan: String {
         get {
-            LunarUtil.SHI_SHEN_GAN[dayGan + monthGan]!
+            LunarUtil.SHI_SHEN[dayGan + monthGan]!
         }
     }
 
@@ -307,7 +307,7 @@ public class EightChar: NSObject {
 
     public var timeShiShenGan: String {
         get {
-            LunarUtil.SHI_SHEN_GAN[dayGan + timeGan]!
+            LunarUtil.SHI_SHEN[dayGan + timeGan]!
         }
     }
 

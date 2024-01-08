@@ -151,7 +151,7 @@ public class Solar: NSObject {
         var l = [Solar]()
         var years = [Int]()
         let today = Solar()
-        var offsetYear = LunarUtil.getJiaZiIndex(ganZhi: today.lunar.yearInGanZhiExact) - LunarUtil.getJiaZiIndex(ganZhi: yearGanZhi)
+        var offsetYear = (today.year - 4) % 60 - LunarUtil.getJiaZiIndex(ganZhi: yearGanZhi)
         if offsetYear < 0
         {
             offsetYear += 60
