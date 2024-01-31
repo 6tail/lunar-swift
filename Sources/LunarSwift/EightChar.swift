@@ -374,26 +374,25 @@ public class EightChar: NSObject {
             var monthZhiIndex = 0
             var timeZhiIndex = 0
             for i in (0..<EightChar.MONTH_ZHI.count) {
-                let zhi = EightChar.MONTH_ZHI[i]
-                if _lunar.monthZhiExact == zhi {
+                if monthZhi == EightChar.MONTH_ZHI[i] {
                     monthZhiIndex = i
+                    break
                 }
-                if _lunar.timeZhi == zhi {
+            }
+            for i in (0..<EightChar.MONTH_ZHI.count) {
+                let zhi = EightChar.MONTH_ZHI[i]
+                if timeZhi == zhi {
                     timeZhiIndex = i
+                    break
                 }
             }
-            var zhiIndex = 26 - (monthZhiIndex + timeZhiIndex)
-            if zhiIndex > 12 {
-                zhiIndex -= 12
+            var offset = monthZhiIndex + timeZhiIndex
+            offset = (offset >= 14 ? 26 : 14) - offset
+            var ganIndex = (_lunar.yearGanIndexExact + 1) * 2 + offset
+            while (ganIndex > 10) {
+                ganIndex -= 10
             }
-            var jiaZiIndex = LunarUtil.getJiaZiIndex(ganZhi: _lunar.monthInGanZhiExact) - (monthZhiIndex - zhiIndex)
-            if jiaZiIndex >= 60 {
-                jiaZiIndex -= 60
-            }
-            if jiaZiIndex < 0 {
-                jiaZiIndex += 60
-            }
-            return LunarUtil.JIA_ZI[jiaZiIndex]
+            return LunarUtil.GAN[ganIndex] + EightChar.MONTH_ZHI[offset]
         }
     }
 
@@ -408,26 +407,27 @@ public class EightChar: NSObject {
             var monthZhiIndex = 0
             var timeZhiIndex = 0
             for i in (0..<EightChar.MONTH_ZHI.count) {
-                let zhi = EightChar.MONTH_ZHI[i]
-                if _lunar.monthZhiExact == zhi {
+                if monthZhi == EightChar.MONTH_ZHI[i] {
                     monthZhiIndex = i
+                    break
                 }
-                if _lunar.timeZhi == zhi {
+            }
+            for i in (0..<LunarUtil.ZHI.count) {
+                let zhi = LunarUtil.ZHI[i]
+                if timeZhi == zhi {
                     timeZhiIndex = i
+                    break
                 }
             }
-            var zhiIndex = 2 + monthZhiIndex + timeZhiIndex
-            if zhiIndex > 12 {
-                zhiIndex -= 12
+            var offset = monthZhiIndex + timeZhiIndex
+            while (offset > 12) {
+                offset -= 12
             }
-            var jiaZiIndex = LunarUtil.getJiaZiIndex(ganZhi: _lunar.monthInGanZhiExact) - (monthZhiIndex - zhiIndex)
-            if jiaZiIndex >= 60 {
-                jiaZiIndex -= 60
+            var ganIndex = (_lunar.yearGanIndexExact + 1) * 2 + (offset % 12)
+            while (ganIndex > 10) {
+                ganIndex -= 10
             }
-            if jiaZiIndex < 0 {
-                jiaZiIndex += 60
-            }
-            return LunarUtil.JIA_ZI[jiaZiIndex]
+            return LunarUtil.GAN[ganIndex] + EightChar.MONTH_ZHI[offset]
         }
     }
 

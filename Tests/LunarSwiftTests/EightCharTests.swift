@@ -51,5 +51,12 @@ final class EightCharTests: XCTestCase {
         XCTAssertEqual(eightChar.day, "壬子")
         XCTAssertEqual(eightChar.time, "癸卯")
     }
+    
+    func test5() throws {
+        let solar = Solar.fromYmdHms(year: 1994, month: 12, day: 6, hour: 2)
+        let lunar = solar.lunar
+        let eightChar = lunar.eightChar
+        XCTAssertEqual(eightChar.shenGong, "乙丑")
+    }
 
 }
