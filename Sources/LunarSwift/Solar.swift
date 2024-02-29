@@ -149,57 +149,73 @@ public class Solar: NSObject {
     public class func fromBaZi(yearGanZhi: String, monthGanZhi: String, dayGanZhi: String, timeGanZhi: String, sect: Int = 2, baseYear: Int = 1900) -> [Solar] {
         let sec = (1 == sect) ? 1 : 2
         var l = [Solar]()
-        var years = [Int]()
-        let today = Solar()
-        var offsetYear = (today.year - 4) % 60 - LunarUtil.getJiaZiIndex(ganZhi: yearGanZhi)
-        if offsetYear < 0
-        {
-            offsetYear += 60
+        // 月地支距寅月的偏移值
+        var m = LunarUtil.find(name: String(monthGanZhi.suffix(1)), names: LunarUtil.ZHI, offset: -1) - 2
+        if m < 0 {
+            m += 12
         }
-        var startYear = today.year - offsetYear - 1
-        let minYear = baseYear - 2
-        while startYear >= minYear {
-            years.append(startYear)
-            startYear -= 60
+        // 月天干要一致
+        if (((LunarUtil.find(name: String(yearGanZhi.prefix(1)), names: LunarUtil.GAN, offset: -1) + 1) * 2 + m) % 10 != LunarUtil.find(name: String(monthGanZhi.prefix(1)), names: LunarUtil.GAN, offset: -1)) {
+            return l
         }
+        // 1年的立春是辛酉，序号57
+        var y = LunarUtil.getJiaZiIndex(ganZhi: yearGanZhi) - 57
+        if y < 0 {
+            y += 60
+        }
+        y += 1
+        // 节令偏移值
+        m *= 2
+        // 时辰地支转时刻，子时按零点算
+        let h = LunarUtil.find(name: String(timeGanZhi.suffix(1)), names: LunarUtil.ZHI, offset: -1) * 2
         var hours = [Int]()
-        let timeZhi = timeGanZhi.suffix(1)
-        for i in (1..<LunarUtil.ZHI.count)
-        {
-            if LunarUtil.ZHI[i] == timeZhi
-            {
-                hours.append((i - 1) * 2)
-                break
-            }
-        }
-        if "子" == timeZhi
-        {
+        hours.append(h)
+        if 0 == h && 2 == sec {
             hours.append(23)
         }
-        for hour in hours
-        {
-            for y in years
-            {
-                let maxYear = y + 3
-                var year = y
-                var month = 11
-                if year < baseYear
-                {
-                    year = baseYear
-                    month = 1
-                }
-                var solar = Solar.fromYmdHms(year: year, month: month, day: 1, hour: hour)
-                while solar.year <= maxYear {
-                    let lunar = solar.lunar
-                    let dgz = (2 == sec) ? lunar.dayInGanZhiExact2 : lunar.dayInGanZhiExact
-                    if lunar.yearInGanZhiExact == yearGanZhi && lunar.monthInGanZhiExact == monthGanZhi && dgz == dayGanZhi && lunar.timeInGanZhi == timeGanZhi
-                    {
-                        l.append(solar)
-                        break
+        let startYear = baseYear - 1
+        
+        // 结束年
+        let endYear = Calendar.current.component(.year, from: Date())
+        
+        while y <= endYear {
+            if y >= startYear {
+                // 立春为寅月的开始
+                let jieQiTable = Lunar.fromYmdHms(lunarYear: y, lunarMonth: 1, lunarDay: 1).jieQiTable
+                // 节令推移，年干支和月干支就都匹配上了
+                var solarTime = jieQiTable[Lunar.JIE_QI_IN_USE[4 + m]]!
+                if solarTime.year >= baseYear {
+                    // 日干支和节令干支的偏移值
+                    var lunar = solarTime.lunar
+                    var dgz = (2 == sect) ? lunar.dayInGanZhiExact2 : lunar.dayInGanZhiExact
+                    var d = LunarUtil.getJiaZiIndex(ganZhi: dayGanZhi) - LunarUtil.getJiaZiIndex(ganZhi: dgz)
+                    if d < 0 {
+                        d += 60
                     }
-                    solar = solar.next(days: 1)
+                    if d > 0 {
+                        // 从节令推移天数
+                        solarTime = solarTime.next(days: d)
+                    }
+                    for hour in hours {
+                        var mi = 0
+                        var s = 0
+                        if d == 0 && hour == solarTime.hour {
+                            // 如果正好是节令当天，且小时和节令的小时数相等的极端情况，把分钟和秒钟带上
+                            mi = solarTime.minute
+                            s = solarTime.second
+                        }
+                        // 验证一下
+                        let solar = Solar.fromYmdHms(year: solarTime.year, month: solarTime.month, day: solarTime.day, hour: hour, minute: mi, second: s)
+                        lunar = solar.lunar
+                        dgz = (2 == sect) ? lunar.dayInGanZhiExact2 : lunar.dayInGanZhiExact
+                        if lunar.yearInGanZhiExact == yearGanZhi && lunar.monthInGanZhiExact == monthGanZhi && dgz == dayGanZhi && lunar.timeInGanZhi == timeGanZhi
+                        {
+                            l.append(solar)
+                        }
+                    }
                 }
             }
+            y += 60
         }
         return l
     }

@@ -58,5 +58,34 @@ final class EightCharTests: XCTestCase {
         let eightChar = lunar.eightChar
         XCTAssertEqual(eightChar.shenGong, "乙丑")
     }
+    
+    func test6() throws {
+        let solars = Solar.fromBaZi(yearGanZhi: "甲辰", monthGanZhi: "丙寅", dayGanZhi: "己亥", timeGanZhi: "戊辰")
+        var actual = [String]()
+        for solar in solars {
+            actual.append(solar.ymdhms)
+        }
+        
+        var expected = [String]()
+        expected.append("1964-02-20 08:00:00")
+        expected.append("2024-02-05 08:00:00")
+        XCTAssertEqual(actual, expected)
+    }
+    
+    func test7() throws {
+        let lunar = Lunar.fromYmdHms(lunarYear: 1981, lunarMonth: 9, lunarDay: 3, hour: 18)
+        XCTAssertEqual(lunar.eightChar.yearShiShenZhi.joined(separator: " "), "比肩")
+        XCTAssertEqual(lunar.eightChar.monthShiShenZhi.joined(separator: " "), "比肩")
+        XCTAssertEqual(lunar.eightChar.dayShiShenZhi.joined(separator: " "), "伤官 正财")
+        XCTAssertEqual(lunar.eightChar.timeShiShenZhi.joined(separator: " "), "比肩")
+    }
+    
+    func test8() throws {
+        let eightChar = Solar.fromYmdHms(year: 1989, month: 2, day: 5, hour: 22, minute: 30).lunar.eightChar
+        let daYun = eightChar.getYun(gender: 1).getDaYun()
+        XCTAssertEqual(daYun[1].startAge, 1)
+        let liuNian = daYun[1].getLiuNian()
+        XCTAssertEqual(liuNian[0].age, 1)
+    }
 
 }

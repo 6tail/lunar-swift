@@ -1265,7 +1265,7 @@ public class Lunar: NSObject {
                 day = solar.ymdhms
             }
             if forward {
-                if day < today {
+                if day <= today {
                     continue
                 }
                 if nil == near {
