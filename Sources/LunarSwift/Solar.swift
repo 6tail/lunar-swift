@@ -186,9 +186,7 @@ public class Solar: NSObject {
                 var solarTime = jieQiTable[Lunar.JIE_QI_IN_USE[4 + m]]!
                 if solarTime.year >= baseYear {
                     // 日干支和节令干支的偏移值
-                    var lunar = solarTime.lunar
-                    var dgz = (2 == sect) ? lunar.dayInGanZhiExact2 : lunar.dayInGanZhiExact
-                    var d = LunarUtil.getJiaZiIndex(ganZhi: dayGanZhi) - LunarUtil.getJiaZiIndex(ganZhi: dgz)
+                    var d = LunarUtil.getJiaZiIndex(ganZhi: dayGanZhi) - LunarUtil.getJiaZiIndex(ganZhi: solarTime.lunar.dayInGanZhiExact2)
                     if d < 0 {
                         d += 60
                     }
@@ -206,8 +204,8 @@ public class Solar: NSObject {
                         }
                         // 验证一下
                         let solar = Solar.fromYmdHms(year: solarTime.year, month: solarTime.month, day: solarTime.day, hour: hour, minute: mi, second: s)
-                        lunar = solar.lunar
-                        dgz = (2 == sect) ? lunar.dayInGanZhiExact2 : lunar.dayInGanZhiExact
+                        let lunar = solar.lunar
+                        let dgz = (2 == sect) ? lunar.dayInGanZhiExact2 : lunar.dayInGanZhiExact
                         if lunar.yearInGanZhiExact == yearGanZhi && lunar.monthInGanZhiExact == monthGanZhi && dgz == dayGanZhi && lunar.timeInGanZhi == timeGanZhi
                         {
                             l.append(solar)
