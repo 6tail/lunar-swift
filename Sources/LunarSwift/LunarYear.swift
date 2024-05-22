@@ -50,6 +50,15 @@ public class LunarYear: NSObject {
         }
         return n
     }
+    
+    public var leapMonth: Int {
+        for m in _months {
+            if m.year == _year && m.leap {
+                return abs(m.month)
+            }
+        }
+        return 0
+    }
 
     public var jieQiJulianDays: [Double] {
         _jieQiJulianDays
@@ -65,6 +74,74 @@ public class LunarYear: NSObject {
 
     public var ganZhi: String {
         "\(gan)\(zhi)"
+    }
+    
+    public var yuan: String {
+        "\(LunarYear.YUAN[((_year + 2696) / 60) % 3])元"
+    }
+    
+    public var yun: String {
+        "\(LunarYear.YUN[((year + 2696) / 20) % 9])运"
+    }
+    
+    public var positionXi: String {
+        "\(LunarUtil.POSITION_XI[_ganIndex + 1])"
+    }
+    
+    public var positionXiDesc: String {
+        LunarUtil.POSITION_DESC[positionXi]!
+    }
+    
+    public var positionYangGui: String {
+        "\(LunarUtil.POSITION_YANG_GUI[_ganIndex + 1])"
+    }
+    
+    public var positionYangGuiDesc: String {
+        LunarUtil.POSITION_DESC[positionYangGui]!
+    }
+    
+    public var positionYinGui: String {
+        "\(LunarUtil.POSITION_YIN_GUI[_ganIndex + 1])"
+    }
+    
+    public var positionYinGuiDesc: String {
+        LunarUtil.POSITION_DESC[positionYinGui]!
+    }
+    
+    public var positionCai: String {
+        "\(LunarUtil.POSITION_CAI[_ganIndex + 1])"
+    }
+    
+    public var positionCaiDesc: String {
+        LunarUtil.POSITION_DESC[positionCai]!
+    }
+    
+    public func getPositionFu(sect: Int) -> String {
+        let index = _ganIndex + 1
+        if 1 == sect {
+            return LunarUtil.POSITION_FU[index]
+        }
+        return LunarUtil.POSITION_FU_2[index]
+    }
+    
+    public func getPositionFuDesc(sect: Int) -> String {
+        LunarUtil.POSITION_DESC[getPositionFu(sect: sect)]!
+    }
+    
+    public var positionFu: String {
+        getPositionFu(sect: 2)
+    }
+    
+    public var positionFuDesc: String {
+        getPositionFuDesc(sect: 2)
+    }
+    
+    public var positionTaiSui: String {
+        "\(LunarUtil.POSITION_TAI_SUI_YEAR[_zhiIndex])"
+    }
+    
+    public var positionTaiSuiDesc: String {
+        LunarUtil.POSITION_DESC[positionTaiSui]!
     }
 
     public init(lunarYear: Int) {
