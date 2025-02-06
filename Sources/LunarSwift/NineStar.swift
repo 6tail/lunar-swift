@@ -3,7 +3,7 @@ import Foundation
 @objcMembers
 public class NineStar: NSObject {
     public static var NUMBER: [String] = ["一", "二", "三", "四", "五", "六", "七", "八", "九"]
-    public static var COLOR: [String] = ["白", "黒", "碧", "绿", "黄", "白", "赤", "白", "紫"]
+    public static var COLOR: [String] = ["白", "黑", "碧", "绿", "黄", "白", "赤", "白", "紫"]
     public static var WU_XING: [String] = ["水", "土", "木", "木", "土", "金", "金", "土", "火"]
 
     public static var POSITION: [String] = ["坎", "坤", "震", "巽", "中", "乾", "兑", "艮", "离"]

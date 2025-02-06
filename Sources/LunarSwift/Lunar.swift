@@ -139,7 +139,7 @@ public class Lunar: NSObject {
     }
 
     public init(lunarYear: Int, lunarMonth: Int, lunarDay: Int, hour: Int = 0, minute: Int = 0, second: Int = 0) {
-        var y = LunarYear(lunarYear: lunarYear)
+        var y = LunarYear.fromYear(lunarYear: lunarYear)
         let m = y.getMonth(lunarMonth: lunarMonth)
         if nil == m {
             fatalError("wrong lunar year \(lunarYear) month \(lunarMonth)")
@@ -353,7 +353,7 @@ public class Lunar: NSObject {
         var lunarYear = 0
         var lunarMonth = 0
         var lunarDay = 0
-        let ly = LunarYear(lunarYear: solar.year)
+        let ly = LunarYear.fromYear(lunarYear: solar.year)
         for m in ly.months {
             let days = solar.subtract(solar: Solar.fromJulianDay(julianDay: m.firstJulianDay))
             if days < m.dayCount {

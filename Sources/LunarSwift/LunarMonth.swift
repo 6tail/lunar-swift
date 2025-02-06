@@ -30,7 +30,7 @@ public class LunarMonth: NSObject {
     }
 
     public var ganIndex: Int {
-        let offset = (LunarYear(lunarYear: _year).ganIndex + 1) % 5 * 2
+        let offset = (LunarYear.fromYear(lunarYear: _year).ganIndex + 1) % 5 * 2
         return (_index - 1 + offset) % 10
     }
 
@@ -48,7 +48,7 @@ public class LunarMonth: NSObject {
     }
 
     public class func fromYm(lunarYear: Int, lunarMonth: Int) -> LunarMonth? {
-        LunarYear(lunarYear: lunarYear).getMonth(lunarMonth: lunarMonth)
+        LunarYear.fromYear(lunarYear: lunarYear).getMonth(lunarMonth: lunarMonth)
     }
 
     public var leap: Bool {
