@@ -163,5 +163,10 @@ final class LunarTests: XCTestCase {
     func test37() throws {
         XCTAssertEqual(Solar.fromYmdHms(year: 2021, month: 11, day: 27).lunar.dayYi, ["嫁娶", "祭祀", "祈福", "求嗣", "开光", "出行", "解除", "出火", "拆卸", "进人口", "入宅", "移徙", "安床", "栽种", "动土", "修造", "纳畜", "入殓", "安葬", "立碑", "除服", "成服"])
     }
+    
+    func test38() throws {
+        XCTAssertEqual(Solar.fromYmdHms(year: 2025, month: 2, day: 7).lunar.dayYi, ["嫁娶", "祭祀", "祈福", "出行", "解除", "出火", "拆卸", "动土", "入宅", "移徙", "安床", "上梁", "栽种", "纳畜", "破土", "启钻", "安葬"])
+        XCTAssertEqual(Solar.fromYmdHms(year: 2025, month: 2, day: 7).lunar.dayJi, ["开市", "立券", "理发", "作灶"])
+    }
 
 }
