@@ -704,7 +704,7 @@ public class LunarUtil {
                 if let range = Range(match.range(at: 1), in: DAY_YI_JI) {
                     let v = String(DAY_YI_JI[range])
                     do {
-                        if !(try NSRegularExpression(pattern: month + "[\\w{2}]*:").matches(in: v, range: NSRange(location: 0, length: v.utf16.count))).isEmpty {
+                        if !(try NSRegularExpression(pattern: month + "(?:\\w{2})*:").matches(in: v, range: NSRange(location: 0, length: v.utf16.count))).isEmpty {
                             let matcher = try NSRegularExpression(pattern: pattern).matches(in: v, range: NSRange(location: 0, length: v.utf16.count))
                             for m in matcher {
                                 if let r = Range(m.range(at: 1), in: v) {
