@@ -878,6 +878,14 @@ public class Lunar: NSObject {
     public var nextJie: JieQi {
         getNextJie(wholeDay: false)!
     }
+    
+    public var prevQi: JieQi {
+        getPrevQi(wholeDay: false)!
+    }
+
+    public var nextQi: JieQi {
+        getNextQi(wholeDay: false)!
+    }
 
     public var prevJieQi: JieQi {
         getPrevJieQi(wholeDay: false)!
@@ -1219,6 +1227,15 @@ public class Lunar: NSObject {
         }
         return getNearJieQi(forward: true, conditions: conditions, wholeDay: wholeDay)
     }
+    
+    public func getNextQi(wholeDay: Bool = false) -> JieQi? {
+        let l = Lunar.JIE_QI_IN_USE.count / 2
+        var conditions = [String]()
+        for i in 0 ..< l {
+            conditions.append(Lunar.JIE_QI_IN_USE[i * 2 + 1])
+        }
+        return getNearJieQi(forward: true, conditions: conditions, wholeDay: wholeDay)
+    }
 
     public func getPrevJieQi(wholeDay: Bool = false) -> JieQi? {
         getNearJieQi(forward: false, conditions: nil, wholeDay: wholeDay)
@@ -1229,6 +1246,15 @@ public class Lunar: NSObject {
         var conditions = [String]()
         for i in 0 ..< l {
             conditions.append(Lunar.JIE_QI_IN_USE[i * 2])
+        }
+        return getNearJieQi(forward: false, conditions: conditions, wholeDay: wholeDay)
+    }
+    
+    public func getPrevQi(wholeDay: Bool = false) -> JieQi? {
+        let l = Lunar.JIE_QI_IN_USE.count / 2
+        var conditions = [String]()
+        for i in 0 ..< l {
+            conditions.append(Lunar.JIE_QI_IN_USE[i * 2 + 1])
         }
         return getNearJieQi(forward: false, conditions: conditions, wholeDay: wholeDay)
     }
