@@ -137,10 +137,10 @@ final class LunarTests: XCTestCase {
     }
     
     func test33() throws {
-        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 10, day: 14).lunar.dayJiShen, ["月德合", "三合", "临日", "天喜", "天医", "普护"])
-        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 10, day: 14).lunar.dayXiongSha, ["重日", "朱雀"])
+        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 10, day: 14).lunar.dayJiShen, ["阴德", "续世", "明堂"])
+        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 10, day: 14).lunar.dayXiongSha, ["游祸", "天贼", "血忌", "重日"])
         
-        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 11, day: 11).lunar.dayJiShen, ["四相", "官日", "除神", "宝光", "鸣吠"])
+        XCTAssertEqual(Solar.fromYmdHms(year: 2023, month: 11, day: 11).lunar.dayJiShen, ["母仓", "时阳", "生气", "圣心", "除神", "鸣吠"])
         
         XCTAssertEqual(Solar.fromYmdHms(year: 2024, month: 2, day: 10).lunar.dayJiShen, ["守日", "天巫", "福德", "六仪", "金堂", "金匮"])
         XCTAssertEqual(Solar.fromYmdHms(year: 2024, month: 2, day: 10).lunar.dayXiongSha, ["厌对", "招摇", "九空", "九坎", "九焦", "复日"])

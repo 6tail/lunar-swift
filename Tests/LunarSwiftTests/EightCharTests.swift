@@ -67,6 +67,7 @@ final class EightCharTests: XCTestCase {
         }
         
         var expected = [String]()
+        expected.append("1904-03-06 07:00:00")
         expected.append("1964-02-20 08:00:00")
         expected.append("2024-02-05 08:00:00")
         XCTAssertEqual(actual, expected)

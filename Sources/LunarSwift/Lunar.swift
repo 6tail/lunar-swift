@@ -744,11 +744,11 @@ public class Lunar: NSObject {
     }
 
     public var dayJiShen: [String] {
-        LunarUtil.getDayJiShen(lunarMonth: _month, dayGanZhi: dayInGanZhi)
+        LunarUtil.getDayJiShen(monthZhiIndex: monthZhiIndex, dayGanZhi: dayInGanZhi)
     }
 
     public var dayXiongSha: [String] {
-        LunarUtil.getDayXiongSha(lunarMonth: _month, dayGanZhi: dayInGanZhi)
+        LunarUtil.getDayXiongSha(monthZhiIndex: monthZhiIndex, dayGanZhi: dayInGanZhi)
     }
 
     public var dayChong: String {

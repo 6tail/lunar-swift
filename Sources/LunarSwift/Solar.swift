@@ -203,7 +203,10 @@ public class Solar: NSObject {
                             s = solarTime.second
                         }
                         // 验证一下
-                        let solar = Solar.fromYmdHms(year: solarTime.year, month: solarTime.month, day: solarTime.day, hour: hour, minute: mi, second: s)
+                        var solar = Solar.fromYmdHms(year: solarTime.year, month: solarTime.month, day: solarTime.day, hour: hour, minute: mi, second: s)
+                        if d == 30 {
+                            solar = solar.nextHour(hours: -1)
+                        }
                         let lunar = solar.lunar
                         let dgz = (2 == sect) ? lunar.dayInGanZhiExact2 : lunar.dayInGanZhiExact
                         if lunar.yearInGanZhiExact == yearGanZhi && lunar.monthInGanZhiExact == monthGanZhi && dgz == dayGanZhi && lunar.timeInGanZhi == timeGanZhi
