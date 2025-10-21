@@ -11,13 +11,13 @@ final class LunarMonthTests: XCTestCase {
     func test2() throws {
         let month = LunarMonth.fromYm(lunarYear: 2023, lunarMonth: -2)!
         XCTAssertEqual(month.index, 3)
-        XCTAssertEqual(month.ganZhi, "丙辰")
+        XCTAssertEqual(month.ganZhi, "乙卯")
     }
     
     func test3() throws {
         let month = LunarMonth.fromYm(lunarYear: 2023, lunarMonth: 12)!
         XCTAssertEqual(month.index, 13)
-        XCTAssertEqual(month.ganZhi, "丙寅")
+        XCTAssertEqual(month.ganZhi, "乙丑")
     }
 
 }

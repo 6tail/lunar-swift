@@ -753,7 +753,7 @@ public class LunarUtil {
         var l = [String]()
         var m = monthZhiIndex - 2
         if m < 0 {
-            m += 10
+            m += 12
         }
         let jiaZiIndex = getJiaZiIndex(ganZhi: dayGanZhi)
         let pattern = ";\(String(format: "%02X", jiaZiIndex))(.[^;]*)"
@@ -786,7 +786,7 @@ public class LunarUtil {
         var l = [String]()
         var m = monthZhiIndex - 2
         if m < 0 {
-            m += 10
+            m += 12
         }
         let jiaZiIndex = getJiaZiIndex(ganZhi: dayGanZhi)
         let pattern = ";\(String(format: "%02X", jiaZiIndex))(.[^;]*)"

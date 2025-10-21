@@ -31,7 +31,7 @@ public class LunarMonth: NSObject {
 
     public var ganIndex: Int {
         let offset = (LunarYear.fromYear(lunarYear: _year).ganIndex + 1) % 5 * 2
-        return (_index - 1 + offset) % 10
+        return (abs(_month) - 1 + offset) % 10
     }
 
     public var firstJulianDay: Double {
@@ -44,7 +44,7 @@ public class LunarMonth: NSObject {
         _dayCount = dayCount
         _firstJulianDay = firstJulianDay
         _index = index
-        _zhiIndex = (index - 1 + LunarUtil.BASE_MONTH_ZHI_INDEX) % 12
+        _zhiIndex = (abs(lunarMonth) - 1 + LunarUtil.BASE_MONTH_ZHI_INDEX) % 12
     }
 
     public class func fromYm(lunarYear: Int, lunarMonth: Int) -> LunarMonth? {

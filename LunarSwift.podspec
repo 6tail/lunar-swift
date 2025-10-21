@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "LunarSwift"
-  spec.version      = "1.1.6"
+  spec.version      = "1.1.7"
   spec.summary      = "A calendar library for Solar and Chinese Lunar."
 
   # This description is used to generate tags and improve search results.
