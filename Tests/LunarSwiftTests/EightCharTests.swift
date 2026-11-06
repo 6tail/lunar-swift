@@ -89,4 +89,15 @@ final class EightCharTests: XCTestCase {
         XCTAssertEqual(liuNian[0].age, 1)
     }
 
+    func test9() throws {
+        let solars = Solar.fromBaZi(yearGanZhi: "丙寅", monthGanZhi: "壬辰", dayGanZhi: "己酉", timeGanZhi: "甲子", sect: 1)
+        var actual = [String]()
+        for solar in solars {
+            actual.append(solar.ymdhms)
+        }
+        
+        var expected = [String]()
+        expected.append("1986-05-04 23:00:00")
+        XCTAssertEqual(actual, expected)
+    }
 }
